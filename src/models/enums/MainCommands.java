@@ -1,12 +1,15 @@
 package models.enums;
 
-import views.AppMenu;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum MainCommands implements Command {
-    SeeCharacters("see characters")
+    ShowCurrentMenu ("^\\s*show\\s+current\\s+menu\\s*$"),
+    Exit ("^\\s*exit\\s*$"),
+    KnightsDetails("\\s*knights\\s+details\\s*"),
+    CustomizeKnight                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     ("\\s*customize\\s+knight\\s*"),
+    Play("\\s*play\\s+with\\s+(?<username>.*)\\s*"),
+    LogOut("\\s*logout\\s*"),
     ;
 
     private final String pattern;

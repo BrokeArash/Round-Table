@@ -16,4 +16,8 @@ public enum KnightClass {
     KnightClass(String name) {
         this.name = name;
     }
+
+    public String getKnightName() {
+        return name;
+    }
 }

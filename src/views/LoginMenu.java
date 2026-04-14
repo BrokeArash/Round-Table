@@ -37,15 +37,8 @@ public class LoginMenu implements AppMenu {
                     Result result = controller.login(loginMatcher);
                     System.out.println(result);
                     break;
-                case ForgetPass:
-                    Matcher forgetPassMatcher = LoginCommands.ForgetPass.getMatcher(input);
-                    result = controller.forgetPass(forgetPassMatcher);
-                    System.out.println(result);
-                    break;
-                case Back:
-                    result = controller.BackToSignup();
-                    System.out.println(result);
-                    break;
+
+
             }
         }
 

@@ -3,12 +3,12 @@ package models;
 public class Player {
     private String name;
     private String password;
-    private String email;
+    //private String email;
 
-    public Player(String name, String password, String email) {
+    public Player(String name, String password) {
         this.name = name;
         this.password = password;
-        this.email = email;
+        //this.email = email;
     }
 
     public String getName() {
@@ -27,11 +27,11 @@ public class Player {
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
+//    public String getEmail() {
+//        return email;
+//    }
+//
+//    public void setEmail(String email) {
+//        this.email = email;
+//    }
 }

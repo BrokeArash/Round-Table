@@ -8,13 +8,15 @@ public class App {
     private static ArrayList<Player> players;
     private static Menu currentMenu;
     private static Player mainPlayer;
+    private static Player otherPlayer;
 
     /* Requests */
     private static boolean gotoSignup;
     private static boolean loginSuccessful;
+    private static boolean gotoGame;
     private static boolean exit;
 
-
+    private static Game game;
 
     public static ArrayList<Player> getPlayers() {
         if (players == null) players = new ArrayList<>();
@@ -42,6 +44,22 @@ public class App {
         App.mainPlayer = mainPlayer;
     }
 
+    public static Player getOtherPlayer() {
+        return otherPlayer;
+    }
+
+    public static void setOtherPlayer(Player otherPlayer) {
+        App.otherPlayer = otherPlayer;
+    }
+
+    public static Game getGame() {
+        return game;
+    }
+
+    public static void setGame(Game game) {
+        App.game = game;
+    }
+
     public static Player getPlayerByUsername(String username) {
         for (Player player : App.getPlayers()) {
             if(player.getName().equals(username))
@@ -65,6 +83,14 @@ public class App {
 
     public static void setLoginSuccessful(boolean loginSuccessful) {
         App.loginSuccessful = loginSuccessful;
+    }
+
+    public static boolean isGotoGame() {
+        return gotoGame;
+    }
+
+    public static void setGotoGame(boolean gotoGame) {
+        App.gotoGame = gotoGame;
     }
 
     public static boolean isExit() {

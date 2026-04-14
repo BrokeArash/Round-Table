@@ -24,7 +24,11 @@ public class AppView {
                 App.setCurrentMenu(Menu.MainMenu);
             }
 
-
+            /* is go to game successful */
+            else if (App.isGotoGame()) {
+                App.setGotoGame(false);
+                App.setCurrentMenu(Menu.GameMenu);
+            }
 
 
         }

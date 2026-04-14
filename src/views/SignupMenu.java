@@ -35,13 +35,11 @@ public class SignupMenu implements AppMenu {
                 case ShowCurrentMenu:
                     System.out.println(App.getCurrentMenu());
                     break;
-
                 case Exit:
                     App.setExit(true);
                     break;
-
-                case Register:
-                    Matcher matcher = SignupCommands.Register.getMatcher(input);
+                case Signup:
+                    Matcher matcher = SignupCommands.Signup.getMatcher(input);
                     Result result = controller.register(matcher);
                     System.out.println(result);
                     break;

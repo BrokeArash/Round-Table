@@ -11,11 +11,11 @@ public class SignupController {
     public Result register(Matcher matcher) {
         String username = matcher.group("username");
         String password = matcher.group("password");
-        String email = matcher.group("email");
+        //String email = matcher.group("email");
 
         Matcher usernameMatcher = SignupCommands.CheckUsername.getMatcher(username);
         Matcher passwordMatcher = SignupCommands.CheckPass.getMatcher(password);
-        Matcher emailMatcher = SignupCommands.CheckEmail.getMatcher(email);
+        //Matcher emailMatcher = SignupCommands.CheckEmail.getMatcher(email);
 
         if(usernameMatcher == null)
             return new Result(false, "Invalid username!");
@@ -23,10 +23,10 @@ public class SignupController {
             return new Result(false, "Username already exists!");
         else if (passwordMatcher == null)
             return new Result(false, "Invalid password!");
-        else if (emailMatcher == null)
-            return new Result(false, "Invalid email!");
+//        else if (emailMatcher == null)
+//            return new Result(false, "Invalid email!");
         else {
-            Player newPlayer = new Player(username, password, email);
+            Player newPlayer = new Player(username, password);
             App.getPlayers().add(newPlayer);
             return new Result(true, "Signup Successful!");
         }

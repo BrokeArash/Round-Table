@@ -6,10 +6,9 @@ import java.util.regex.Pattern;
 public enum SignupCommands implements Command {
     ShowCurrentMenu ("^\\s*show\\s+current\\s+menu\\s*$"),
     Exit ("^\\s*exit\\s*$"),
-    Register ("^\\s*register\\s+" +
+    Signup ("^\\s*signup\\s+" +
             "-username\\s+(?<username>.*)\\s+" +
-            "-password\\s+(?<password>.*)\\s+" +
-            "-email\\s+(?<email>.*)$"),
+            "-password\\s+(?<password>.*)\\s*$"),
     Login ("\\s*login\\s+" +
             "-username\\s+(?<username>.*)\\s+" +
             "-password\\s+(?<password>.*)\\s*"),

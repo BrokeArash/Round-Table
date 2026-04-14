@@ -22,22 +22,17 @@ public class LoginController {
         }
     }
 
-    public Result forgetPass(Matcher matcher) {
-        String username = matcher.group("username");
-        String email = matcher.group("email");
-        Player player = App.getPlayerByUsername(username);
-
-        if (player == null) {
-            return new Result(false, "username doesn't exist!");
-        } else if (!player.getEmail().equals(email)) {
-            return new Result(false, "email doesn't match!");
-        } else {
-            return new Result(true, "password: " + player.getPassword());
-        }
-    }
-
-    public Result BackToSignup() {
-        App.setBack(true);
-        return new Result(true, "You're in Signup Menu!");
-    }
+//    public Result forgetPass(Matcher matcher) {
+//        String username = matcher.group("username");
+//        String email = matcher.group("email");
+//        Player player = App.getPlayerByUsername(username);
+//
+//        if (player == null) {
+//            return new Result(false, "username doesn't exist!");
+//        } else if (!player.getEmail().equals(email)) {
+//            return new Result(false, "email doesn't match!");
+//        } else {
+//            return new Result(true, "password: " + player.getPassword());
+//        }
+//    }
 }
