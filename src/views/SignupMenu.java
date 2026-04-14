@@ -4,8 +4,6 @@ package views;
 import controllers.SignupController;
 import models.App;
 import models.Result;
-import models.enums.LoginCommands;
-import models.enums.Menu;
 import models.enums.SignupCommands;
 
 import java.util.Scanner;

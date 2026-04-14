@@ -81,14 +81,23 @@ public class MainMenu implements AppMenu {
                                     Knight newKnight = new Knight(chosen, App.getGame().getPlayer1());
                                     App.getGame().getKnights1().add(newKnight);
                                     App.getGame().getQueue().add(newKnight);
+                                    if (i == 1) {
+                                        App.getGame().getKnights1().get(0).setTeammate(newKnight);
+                                        newKnight.setTeammate(App.getGame().getKnights1().get(0));
+                                    }
                                 } else {
                                     Knight newKnight = new Knight(chosen, App.getGame().getPlayer2());
                                     App.getGame().getKnights2().add(newKnight);
                                     App.getGame().getQueue().add(newKnight);
+                                    if (i == 3) {
+                                        App.getGame().getKnights2().get(0).setTeammate(newKnight);
+                                        newKnight.setTeammate(App.getGame().getKnights2().get(0));
+                                    }
                                 }
                                 validName = true;
                             }
                         }
+                        App.getGame().nextTurn();
                         App.setGotoGame(true);
                     }
 
