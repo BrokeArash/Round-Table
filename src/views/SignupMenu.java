@@ -4,6 +4,7 @@ package views;
 import controllers.SignupController;
 import models.App;
 import models.Result;
+import models.enums.LoginCommands;
 import models.enums.Menu;
 import models.enums.SignupCommands;
 
@@ -45,7 +46,8 @@ public class SignupMenu implements AppMenu {
                     System.out.println(result);
                     break;
                 case Login:
-                    result = controller.gotoLogin();
+                    Matcher loginMatcher = LoginCommands.Login.getMatcher(input);
+                    result = controller.login(loginMatcher);
                     System.out.println(result);
                     break;
 

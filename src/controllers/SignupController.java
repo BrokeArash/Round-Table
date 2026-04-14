@@ -32,8 +32,19 @@ public class SignupController {
         }
     }
 
-    public Result gotoLogin() {
-        App.setGotoLogin(true);
-        return new Result(true, "You're in Login Menu!");
+    public Result login(Matcher matcher) {
+        String username = matcher.group("username");
+        String password = matcher.group("password");
+        Player player = App.getPlayerByUsername(username);
+
+        if (player == null)
+            return new Result(false, "Username not found!");
+        else if (!password.equals(player.getPassword()))
+            return new Result(false, "Password incorrect!");
+        else {
+            App.setMainPlayer(player);
+            App.setLoginSuccessful(true);
+            return new Result(true, "Logged in successfully!");
+        }
     }
 }

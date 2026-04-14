@@ -10,7 +10,9 @@ public enum SignupCommands implements Command {
             "-username\\s+(?<username>.*)\\s+" +
             "-password\\s+(?<password>.*)\\s+" +
             "-email\\s+(?<email>.*)$"),
-    Login ("\\s*login\\s*"),
+    Login ("\\s*login\\s+" +
+            "-username\\s+(?<username>.*)\\s+" +
+            "-password\\s+(?<password>.*)\\s*"),
     CheckUsername("^[a-zA-Z][a-zA-Z0-9_]*$"),
     CheckPass("^(?=[A-Za-z])(?=.+[%@#$^&!]).+$"),
     CheckEmail ("^[a-zA-Z0-9.]+@[a-zA-Z]+(?:\\.[a-zA-Z]+)?\\.com$"),

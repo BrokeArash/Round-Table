@@ -10,8 +10,8 @@ public class App {
     private static Player mainPlayer;
 
     /* Requests */
-    private static boolean gotoLogin;
-    private static boolean backToSignup;
+    private static boolean gotoSignup;
+    private static boolean loginSuccessful;
     private static boolean exit;
 
 
@@ -51,20 +51,20 @@ public class App {
     }
 
     /* Requests Getters & Setters */
-    public static boolean isGotoLogin() {
-        return gotoLogin;
+    public static boolean isGotoSignup() {
+        return gotoSignup;
     }
 
-    public static void setGotoLogin(boolean gotoLogin) {
-        App.gotoLogin = gotoLogin;
+    public static void setGotoSignup(boolean gotoSignup) {
+        App.gotoSignup = gotoSignup;
     }
 
-    public static boolean isBack() {
-        return backToSignup;
+    public static boolean isLoginSuccessful() {
+        return loginSuccessful;
     }
 
-    public static void setBack(boolean back) {
-        App.backToSignup = back;
+    public static void setLoginSuccessful(boolean loginSuccessful) {
+        App.loginSuccessful = loginSuccessful;
     }
 
     public static boolean isExit() {

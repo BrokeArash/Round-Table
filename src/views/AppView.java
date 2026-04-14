@@ -13,15 +13,15 @@ public class AppView {
         do {
             App.getCurrentMenu().checkCommand(scanner);
 
-            /* go to login menu */
-            if (App.isGotoLogin()) {
-                App.setGotoLogin(false);
-                App.setCurrentMenu(Menu.LoginMenu);
-            }
-            /* back to signup menu */
-            else if (App.isBack()) {
-                App.setBack(false);
+            /* go to signup menu */
+            if (App.isGotoSignup()) {
+                App.setGotoSignup(false);
                 App.setCurrentMenu(Menu.SignupMenu);
+            }
+            /* is login successful */
+            else if (App.isLoginSuccessful()) {
+                App.setLoginSuccessful(false);
+                App.setCurrentMenu(Menu.MainMenu);
             }
 
 
