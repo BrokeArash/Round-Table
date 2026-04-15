@@ -31,18 +31,20 @@ public class SignupMenu implements AppMenu {
         } else {
             switch(matched) {
                 case ShowCurrentMenu:
-                    System.out.println(App.getCurrentMenu());
+                    Result result = controller.showCurrentMenu();
+                    System.out.println(result);
                     break;
                 case Exit:
-                    App.setExit(true);
+                    result = controller.exit();
+                    System.out.println(result);
                     break;
                 case Signup:
                     Matcher matcher = SignupCommands.Signup.getMatcher(input);
-                    Result result = controller.register(matcher);
+                    result = controller.register(matcher);
                     System.out.println(result);
                     break;
                 case Login:
-                    Matcher loginMatcher = LoginCommands.Login.getMatcher(input);
+                    Matcher loginMatcher = SignupCommands.Login.getMatcher(input);
                     result = controller.login(loginMatcher);
                     System.out.println(result);
                     break;

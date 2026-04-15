@@ -51,7 +51,7 @@ public class Game {
 
     public Knights findKnightByName(String name) {
         for (Knights knight : Knights.values()) {
-            if(knight.getName().equals(name)) {
+            if(knight.getName().equalsIgnoreCase(name)) {
                 return knight;
             }
         }
@@ -59,19 +59,32 @@ public class Game {
     }
 
     public Knight findEnemyKnightByName(String name) {
+        return getKnight(name, knights2, knights1);
+    }
+
+    public Knight findTeamKnightByName(String name) {
+        return getKnight(name, knights1, knights2);
+    }
+
+    private Knight getKnight(String name, ArrayList<Knight> knights1, ArrayList<Knight> knights2) {
         if(player1.equals(App.getGame().currentKnight.getOwner())) {
-            for (Knight knight : knights2) {
-                if (knight.getKnight().getName().equals(name))
+            for (Knight knight : knights1) {
+                if (knight.getKnight().getName().equalsIgnoreCase(name))
                     return knight;
             }
         }
         else {
-            for (Knight knight : knights1) {
-                if (knight.getKnight().getName().equals(name))
+            for (Knight knight : knights2) {
+                if (knight.getKnight().getName().equalsIgnoreCase(name))
                     return knight;
             }
         }
         return null;
+    }
+
+    public Knight getEnemyKnight() {
+        if(player1.equals(App.getGame().currentKnight.getOwner())) return knights2.get(0);
+        return  knights1.get(0);
     }
 
     public void nextTurn() {

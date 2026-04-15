@@ -47,4 +47,13 @@ public class SignupController {
             return new Result(true, "Logged in successfully!");
         }
     }
+
+    public Result showCurrentMenu() {
+        return new Result(true, "current menu: " + App.getCurrentMenu().toString());
+    }
+
+    public Result exit() {
+        App.setExit(true);
+        return new  Result(true, "");
+    }
 }

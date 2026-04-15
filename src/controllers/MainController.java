@@ -1,8 +1,6 @@
 package controllers;
 
-import models.App;
-import models.Player;
-import models.Result;
+import models.*;
 import models.enums.Knights;
 import models.enums.Skills;
 
@@ -38,11 +36,69 @@ public class MainController {
         return new Result(true,  "You're playing with " + otherPlayer.getName() + "!\n");
     }
 
+    public Result chooseKnight(Game game, String inputName, int index) {
+        Knights chosen = game.findKnightByName(inputName.trim());
+
+        if (chosen == null) {
+            return new Result(false, "Invalid knight name!");
+        }
+
+        if (index == 1 &&
+                game.getKnights1().get(0).getKnight().equals(chosen)) {
+            return new Result(false, "You already chosen this knight!");
+        }
+
+        if (index == 3 &&
+                game.getKnights2().get(0).getKnight().equals(chosen)) {
+            return new Result(false, "You already chosen this knight!");
+        }
+
+        Knight newKnight;
+        if (index < 2) {
+            newKnight = new Knight(chosen, game.getPlayer1());
+            game.getKnights1().add(newKnight);
+            game.getQueue().add(newKnight);
+
+            if (index == 1) {
+                game.getKnights1().get(0).setTeammate(newKnight);
+                newKnight.setTeammate(game.getKnights1().get(0));
+            } else {
+                game.setCurrentKnight(newKnight);
+            }
+
+        } else {
+            newKnight = new Knight(chosen, game.getPlayer2());
+            game.getKnights2().add(newKnight);
+            game.getQueue().add(newKnight);
+
+            if (index == 3) {
+                game.getKnights2().get(0).setTeammate(newKnight);
+                newKnight.setTeammate(game.getKnights2().get(0));
+            }
+        }
+
+        return new Result(true, "Knight selected successfully.");
+    }
+
+    public void playOutro() {
+        App.getGame().getQueue().poll();
+        App.setGotoGame(true);
+    }
+
 
 
     public Result Logout(){
         App.setMainPlayer(null);
         App.setGotoSignup(true);
         return new Result(true,  "Logout successful");
+    }
+
+    public Result showCurrentMenu() {
+        return new Result(true, "current menu: " + App.getCurrentMenu().toString());
+    }
+
+    public Result exit() {
+        App.setExit(true);
+        return new  Result(true, "");
     }
 }

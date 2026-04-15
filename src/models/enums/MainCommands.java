@@ -8,7 +8,7 @@ public enum MainCommands implements Command {
     Exit ("^\\s*exit\\s*$"),
     KnightsDetails("\\s*knights\\s+details\\s*"),
     CustomizeKnight                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     ("\\s*customize\\s+knight\\s*"),
-    Play("\\s*play\\s+with\\s+(?<username>.*)\\s*"),
+    Play("\\s*play\\s+against\\s+(?<username>.*)\\s*"),
     LogOut("\\s*logout\\s*"),
     ;
 

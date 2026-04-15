@@ -11,8 +11,9 @@ public enum GameCommands implements Command {
     ShowAP("\\s*show\\s+AP\\s*"),
     SkipTurn("\\s*skip\\s+turn\\s*"),
     ShowStats("\\s*show\\s+stats\\s+-k\\s+(?<knight>\\w+)\\s*"),
+    ShowStatsEnemy("\\s*show\\s+stats\\s+-e\\s+(?<knight>\\w+)\\s*"),
     ShowCharms("\\s*show\\s+charms\\s*"),
-    Skill("\\s*skill\\s+-s\\s+(?<skill>\\w+)(?:\\s+-k\\s+(?<knight>\\w+))?\\s*"),
+    Skill("\\s*skill\\s+-s\\s+(?<skill>[^-]+?)(?:\\s+-k\\s+(?<knight>\\w+))?\\s*"),
     ShowTurn("\\s*show\\s+turn\\s*"),
     ;
 

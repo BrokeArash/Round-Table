@@ -9,7 +9,7 @@ import java.util.Random;
 
 public enum Skills {
     //Commander
-    ShieldBash("Shield Bash", 3, KnightClass.Commander,
+    ShieldBash("Shield Bash", 3, KnightClass.Commander, true,
             "deals damage to 1 enemy and stun him (skips the turn)") {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
@@ -31,16 +31,16 @@ public enum Skills {
             return new Result(true, stringBuilder.toString());
         }
     },
-    BattleCry("battle Cry", 2, KnightClass.Commander,
-            "buffs team attack") {
-        @Override
-        public Result perform(Knight myKnight, Knight enemyKnight) {
-            myKnight.getCharm().setAttack(1.2);
-            myKnight.getTeammate().getCharm().setAttack(1.2);
-            return new Result(true, ("team's attack buffed by 20%\n"));
-        }
-    },
-    Fortify("Fortify", 1, KnightClass.Commander,
+//    BattleCry("battle Cry", 2, KnightClass.Commander, false,
+//            "buffs team attack") {
+//        @Override
+//        public Result perform(Knight myKnight, Knight enemyKnight) {
+//            myKnight.getCharm().setAttack(1.2);
+//            myKnight.getTeammate().getCharm().setAttack(1.2);
+//            return new Result(true, ("team's attack buffed by 20%\n"));
+//        }
+//    },
+    Fortify("Fortify", 1, KnightClass.Commander, false,
             "increases team defense") {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
@@ -49,7 +49,7 @@ public enum Skills {
             return new Result(true, ("team's defense buffed by 20%\n"));
         }
     },
-    StrikeCommand("Strike Command", 5, KnightClass.Commander,
+    StrikeCommand("Strike Command", 5, KnightClass.Commander, true,
             "deals damage to all enemies") {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
@@ -92,16 +92,16 @@ public enum Skills {
             return new Result(true, stringBuilder.toString());
         }
     },
-    ArmorBreak("Armor Break", 2, KnightClass.Commander,
+    ArmorBreak("Armor Break", 2, KnightClass.Commander, true,
             "lowers enemy defense") {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
             enemyKnight.getCharm().setDefense(0.85);
             enemyKnight.getTeammate().getCharm().setDefense(0.85);
-            return new Result(true, ("enemy's defense nerved by 15%\n"));
+            return new Result(true, ("enemy's defense got nerfed by 15%\n"));
         }
     },
-    Rally("Rally", 4, KnightClass.Commander,
+    Rally("Rally", 4, KnightClass.Commander, false,
             "heals 20% of all teammates HP") {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
@@ -114,7 +114,7 @@ public enum Skills {
     },
 
     //Warrior
-    Slash("Slash", 2, KnightClass.Warrior,
+    Slash("Slash", 2, KnightClass.Warrior, true,
             "basic attack") {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
@@ -136,7 +136,7 @@ public enum Skills {
             return new Result(true, stringBuilder.toString());
         }
     },
-    HeavyStrike("Heavy Strike", 4, KnightClass.Warrior,
+    HeavyStrike("Heavy Strike", 4, KnightClass.Warrior, true,
             "critical damage deals 150% of damage") {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
@@ -158,15 +158,15 @@ public enum Skills {
             return new Result(true, stringBuilder.toString());
         }
     },
-    Rage("Rage", 1, KnightClass.Warrior,
-            "buffs own attack") {
-        @Override
-        public Result perform(Knight myKnight, Knight enemyKnight) {
-            myKnight.getCharm().setAttack(1.5);
-            return new Result(true, myKnight.toString() + "'s attack buffed 50%\n");
-        }
-    },
-    LifeSteal("Life Steal", 5, KnightClass.Warrior,
+//    Rage("Rage", 1, KnightClass.Warrior,
+//            "buffs own attack") {
+//        @Override
+//        public Result perform(Knight myKnight, Knight enemyKnight) {
+//            myKnight.getCharm().setAttack(1.5);
+//            return new Result(true, myKnight.toString() + "'s attack buffed 50%\n");
+//        }
+//    },
+    LifeSteal("Life Steal", 5, KnightClass.Warrior, true,
             "basic damage + 10% heal himself") {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
@@ -191,7 +191,7 @@ public enum Skills {
             return new Result(true, stringBuilder.toString());
         }
     },
-    Berserk("Berserk", 3, KnightClass.Warrior,
+    Berserk("Berserk", 3, KnightClass.Warrior, false,
             "decrease 20% of HP but adds 60% to attack") {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
@@ -206,7 +206,7 @@ public enum Skills {
             return new Result(true, stringBuilder.toString());
         }
     },
-    TrialByCombat("Trial By Combat", 5, KnightClass.Warrior,
+    TrialByCombat("Trial By Combat", 5, KnightClass.Warrior, true,
             "if you are chosen by gods you kill the enemy otherwise you die and winner gets full AP, if tied both die") {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
@@ -240,7 +240,7 @@ public enum Skills {
     },
 
     //Mage
-    Fireball("Fireball", 2, KnightClass.Mage,
+    Fireball("Fireball", 2, KnightClass.Mage, true,
             "basic magic attack") {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
@@ -262,7 +262,7 @@ public enum Skills {
             return new Result(true, stringBuilder.toString());
         }
     },
-    LightningStrike("Lightning Strike", 4, KnightClass.Mage,
+    LightningStrike("Lightning Strike", 4, KnightClass.Mage, true,
             "deals magic + normal attack to all enemies") {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
@@ -305,7 +305,7 @@ public enum Skills {
             return new Result(true, stringBuilder.toString());
         }
     },
-    IceBlast("Ice Blast", 3, KnightClass.Mage,
+    IceBlast("Ice Blast", 3, KnightClass.Mage, true,
             "deals damage and slows enemy") {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
@@ -328,7 +328,7 @@ public enum Skills {
             return new Result(true, stringBuilder.toString());
         }
     },
-    ArcaneSurge("Arcane Surge", 3, KnightClass.Mage,
+    ArcaneSurge("Arcane Surge", 3, KnightClass.Mage, false,
             "boosts own magic power") {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
@@ -336,21 +336,21 @@ public enum Skills {
             return new Result(true, "magic attack got buffed ny 30%\n");
         }
     },
-    MageRevive("Mage Revive", 5, KnightClass.Mage,
-            "bring back teammate with 10% of HP") { //TODO: double check!!!
-        @Override
-        public Result perform(Knight myKnight, Knight teammate) {
-            if(!teammate.isDead()) {
-                return new Result(true, "teammate is not dead!!!\n");
-            } else {
-                teammate.setDead(false);
-                int hp = (int) (teammate.getKnight().getStats().HP() * 0.1);
-                teammate.setHP(hp);
-                return new Result(true, teammate.toString() + " got revived\n");
-            }
-        }
-    },
-    Silence("Silence", 4, KnightClass.Mage,
+//    MageRevive("Mage Revive", 5, KnightClass.Mage,
+//            "bring back teammate with 10% of HP") { //TODO: double check!!!
+//        @Override
+//        public Result perform(Knight myKnight, Knight teammate) {
+//            if(!teammate.isDead()) {
+//                return new Result(true, "teammate is not dead!!!\n");
+//            } else {
+//                teammate.setDead(false);
+//                int hp = (int) (teammate.getKnight().getStats().HP() * 0.1);
+//                teammate.setHP(hp);
+//                return new Result(true, teammate.toString() + " got revived\n");
+//            }
+//        }
+//    },
+    Silence("Silence", 4, KnightClass.Mage, true,
             "stun enemy") {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
@@ -360,19 +360,21 @@ public enum Skills {
     },
 
     //Healer
-    Heal("Heal", 2, KnightClass.Healer,
+    Heal("Heal", 2, KnightClass.Healer, false,
             "restore 20% of HP") {
         @Override
-        public Result perform(Knight myKnight, Knight teammate) {
+        public Result perform(Knight myKnight, Knight enemyKnight) {
+            Knight teammate = myKnight.getTeammate();
             int hp = (int) (teammate.getKnight().getStats().HP()*0.2);
             teammate.decreaseHP(-hp);
             return new Result(true, teammate.toString() + " got healed\n");
         }
     },
-    GroupHeal("Group Heal", 5, KnightClass.Healer,
+    GroupHeal("Group Heal", 5, KnightClass.Healer, false,
             "restore 20% of HP of all team") {
         @Override
-        public Result perform(Knight myKnight, Knight teammate) {
+        public Result perform(Knight myKnight, Knight enemyKnight) {
+            Knight teammate = myKnight.getTeammate();
             int hp = (int) (teammate.getKnight().getStats().HP()*0.2);
             teammate.decreaseHP(-hp);
 
@@ -381,10 +383,11 @@ public enum Skills {
             return new Result(true, "whole team got healed\n");
         }
     },
-    HealerRevive("Healer Revive", 4, KnightClass.Healer,
+    HealerRevive("Healer Revive", 4, KnightClass.Healer, false,
             "bring back teammate with 30% of HP") {
         @Override
-        public Result perform(Knight myKnight, Knight teammate) {
+        public Result perform(Knight myKnight, Knight enemyKnight) {
+            Knight teammate = myKnight.getTeammate();
             if(!teammate.isDead()) {
                 return new Result(true, "teammate is not dead!!!\n");
             } else {
@@ -395,10 +398,11 @@ public enum Skills {
             }
         }
     },
-    Cleanse("Cleanse", 3, KnightClass.Healer,
+    Cleanse("Cleanse", 3, KnightClass.Healer, false,
             "remove all debuffs") {
         @Override
-        public Result perform(Knight myKnight, Knight teammate) {
+        public Result perform(Knight myKnight, Knight enemyKnight) {
+            Knight teammate = myKnight.getTeammate();
             if (myKnight.getCharm().getAttack() < 1) myKnight.getCharm().setAttack(1);
             if (myKnight.getCharm().getMagic() < 1) myKnight.getCharm().setMagic(1);
             if (myKnight.getCharm().getHP() < 1) myKnight.getCharm().setHP(1);
@@ -414,32 +418,33 @@ public enum Skills {
 
         }
     },
-    LightStrike("Light Strike", 2, KnightClass.Healer,
-            "small magic damage") {
-        @Override
-        public Result perform(Knight myKnight, Knight enemyKnight) {
-            int damageDealt = myKnight.getMagicAttack();
-            Random random = new Random();
-            int dodge = random.nextInt(100);
-            if (dodge < enemyKnight.getSpeed()/2) {
-                return new Result(true, "enemy dodged!!!\n");
-            }
-            StringBuilder stringBuilder = new StringBuilder();
-            enemyKnight.decreaseHP(damageDealt);
-            enemyKnight.setStunned(true);
-            stringBuilder.append("Light Strike dealt ").append(damageDealt).append(" damage to ").append(enemyKnight.getKnight().getName()).append("\n");
-            if (enemyKnight.getHP() <= 0) {
-                enemyKnight.setDead(true);
-                stringBuilder.append(enemyKnight.getKnight().getName()).append(" is dead!!!\n");
-                return new Result(true, stringBuilder.toString());
-            }
-            return new Result(true, stringBuilder.toString());
-        }
-    },
-    Blessing("Blessing", 3, KnightClass.Healer,
+//    LightStrike("Light Strike", 2, KnightClass.Healer,
+//            "small magic damage") {
+//        @Override
+//        public Result perform(Knight myKnight, Knight enemyKnight) {
+//            int damageDealt = myKnight.getMagicAttack();
+//            Random random = new Random();
+//            int dodge = random.nextInt(100);
+//            if (dodge < enemyKnight.getSpeed()/2) {
+//                return new Result(true, "enemy dodged!!!\n");
+//            }
+//            StringBuilder stringBuilder = new StringBuilder();
+//            enemyKnight.decreaseHP(damageDealt);
+//            enemyKnight.setStunned(true);
+//            stringBuilder.append("Light Strike dealt ").append(damageDealt).append(" damage to ").append(enemyKnight.getKnight().getName()).append("\n");
+//            if (enemyKnight.getHP() <= 0) {
+//                enemyKnight.setDead(true);
+//                stringBuilder.append(enemyKnight.getKnight().getName()).append(" is dead!!!\n");
+//                return new Result(true, stringBuilder.toString());
+//            }
+//            return new Result(true, stringBuilder.toString());
+//        }
+//    },
+    Blessing("Blessing", 3, KnightClass.Healer, false,
             "buff speed of team 20%") {
         @Override
-        public Result perform(Knight myKnight, Knight teammate) {
+        public Result perform(Knight myKnight, Knight enemyKnight) {
+            Knight teammate = myKnight.getTeammate();
             myKnight.getCharm().setSpeed(1.2);
             teammate.getCharm().setSpeed(1.2);
             return new Result(true, teammate.toString() + " speed got buffed by 20%\n");
@@ -451,14 +456,16 @@ public enum Skills {
     private final String name;
     private final int AP;
     private final KnightClass knightClass;
+    private final boolean enemy;
     private final String description;
     public abstract Result perform(Knight myKnight, Knight enemyKnight);
 
 
-    Skills(String name, int AP, KnightClass knightClass, String description) {
+    Skills(String name, int AP, KnightClass knightClass, boolean enemy, String description) {
         this.name = name;
         this.AP = AP;
         this.knightClass = knightClass;
+        this.enemy = enemy;
         this.description = description;
     }
 
@@ -472,6 +479,10 @@ public enum Skills {
 
     public KnightClass getKnightClass() {
         return knightClass;
+    }
+
+    public boolean isEnemy() {
+        return enemy;
     }
 
     public String getDescription() {

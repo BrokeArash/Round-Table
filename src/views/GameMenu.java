@@ -28,36 +28,47 @@ public class GameMenu implements AppMenu {
         } else {
             switch(matched) {
                 case ShowCurrentMenu:
-                    System.out.println(App.getCurrentMenu());
+                    Result result = controller.showCurrentMenu();
+                    System.out.println(result);
                     break;
                 case Exit:
-                    App.setExit(true);
+                    result = controller.exit();
+                    System.out.println(result);
                     break;
                 case Attack:
                     Matcher matcher = GameCommands.Attack.getMatcher(input);
-                    Result result = controller.Attack(matcher);
+                    result = controller.Attack(matcher);
                     System.out.println(result);
                     break;
                 case ShowTurn:
-                    System.out.println(App.getGame().getCurrentKnight().getKnight().getName());
+                    result = controller.showTurn();
+                    System.out.println(result);
                     break;
                 case ShowStats:
                     matcher = GameCommands.ShowStats.getMatcher(input);
-                    result = controller.showStats(matcher);
+                    result = controller.showStats(matcher, false);
+                    System.out.println(result);
+                    break;
+                case ShowStatsEnemy:
+                    matcher = GameCommands.ShowStatsEnemy.getMatcher(input);
+                    result = controller.showStats(matcher, true);
                     System.out.println(result);
                     break;
                 case SkillsDetails:
                     result = controller.skillDetails();
                     System.out.println(result);
+                    break;
                 case ShowAP:
-                    Knight tmp = App.getGame().getCurrentKnight();
-                    System.out.println(tmp.getKnight().getName() + "'s AP: " + App.getGame().getCurrentKnight().getAP() + "\n");
+                    result = controller.showAP();
+                    System.out.println(result);
                     break;
                 case SkipTurn:
-                    App.getGame().nextTurn();
+                    result = controller.skipTurn();
+                    System.out.println(result);
                     break;
                 case ShowCharms:
-
+                    result = controller.showCharms();
+                    System.out.println(result);
                     break;
                 case Skill:
                     matcher = GameCommands.Skill.getMatcher(input);

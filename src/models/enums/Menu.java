@@ -22,10 +22,6 @@ public enum Menu {
         this.menu.check(scanner);
     }
 
-    public String getName() {
-        return name;
-    }
-
     @Override
     public String toString() {
         return name;

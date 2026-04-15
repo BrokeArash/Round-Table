@@ -30,13 +30,15 @@ public class MainMenu implements AppMenu {
         } else {
             switch (matched) {
                 case ShowCurrentMenu:
-                    System.out.println(App.getCurrentMenu());
+                    Result result = controller.showCurrentMenu();
+                    System.out.println(result);
                     break;
                 case Exit:
-                    App.setExit(true);
+                    result = controller.exit();
+                    System.out.println(result);
                     break;
                 case KnightsDetails:
-                    Result result = controller.SeeCharacters();
+                    result = controller.SeeCharacters();
                     System.out.println(result);
                     break;
                 case LogOut:
@@ -47,60 +49,32 @@ public class MainMenu implements AppMenu {
                     Matcher matcher = MainCommands.Play.getMatcher(input);
                     result = controller.Play(matcher);
                     System.out.println(result);
-                    if(result.isTrue()){
+                    if(result.isTrue()) {
                         App.setGame(new Game(App.getMainPlayer(), App.getOtherPlayer()));
-                        for(int i = 0; i < 4; i++) {
+                        for (int i = 0; i < 4; i++) {
                             boolean validName = false;
+
                             while (!validName) {
-                                if (i < 2) {
-                                    System.out.println("choosing knight for " + App.getGame().getPlayer1().getName() + ":");
-                                } else
-                                    System.out.println("choosing knight for " + App.getGame().getPlayer2().getName() + ":");
-                                String name = scanner.nextLine();
-                                Knights chosen = App.getGame().findKnightByName(name);
-                                if(chosen == null) {
-                                    System.out.println("Invalid knight name!");
-                                    continue;
-                                }
-
-                                if (i == 1) {
-                                    if (App.getGame().getKnights1().get(0).getKnight().equals(chosen)) {
-                                        System.out.println("You already chosen this knight!");
-                                        continue;
-                                    }
-                                }
-
-                                if (i == 3) {
-                                    if (App.getGame().getKnights2().get(0).getKnight().equals(chosen)) {
-                                        System.out.println("You already chosen this knight!");
-                                        continue;
-                                    }
-                                }
 
                                 if (i < 2) {
-                                    Knight newKnight = new Knight(chosen, App.getGame().getPlayer1());
-                                    App.getGame().getKnights1().add(newKnight);
-                                    App.getGame().getQueue().add(newKnight);
-                                    if (i == 1) {
-                                        App.getGame().getKnights1().get(0).setTeammate(newKnight);
-                                        newKnight.setTeammate(App.getGame().getKnights1().get(0));
-                                    }
+                                    System.out.println("choosing knight for " +
+                                            App.getGame().getPlayer1().getName() + ":");
                                 } else {
-                                    Knight newKnight = new Knight(chosen, App.getGame().getPlayer2());
-                                    App.getGame().getKnights2().add(newKnight);
-                                    App.getGame().getQueue().add(newKnight);
-                                    if (i == 3) {
-                                        App.getGame().getKnights2().get(0).setTeammate(newKnight);
-                                        newKnight.setTeammate(App.getGame().getKnights2().get(0));
-                                    }
+                                    System.out.println("choosing knight for " +
+                                            App.getGame().getPlayer2().getName() + ":");
                                 }
-                                validName = true;
+
+                                String name = scanner.nextLine();
+
+                                result = controller.chooseKnight(App.getGame(), name, i);
+                                System.out.println(result);
+
+                                validName = result.isTrue();
                             }
                         }
-                        App.getGame().nextTurn();
-                        App.setGotoGame(true);
+                        controller.playOutro();
                     }
-
+                    break;
             }
         }
     }

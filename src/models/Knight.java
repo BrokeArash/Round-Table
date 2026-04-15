@@ -9,8 +9,8 @@ import java.util.Random;
 import static java.lang.Math.max;
 
 public class Knight {
-    private Knights knight;
-    private Player owner;
+    private final Knights knight;
+    private final Player owner;
     private Knight teammate;
     private int HP;
     private int attack;
@@ -35,14 +35,12 @@ public class Knight {
         this.stunned = false;
         this.dead = false;
         this.AP = 3;
+        this.charm = new Charm();
+
     }
 
     public Knights getKnight() {
         return knight;
-    }
-
-    public void setKnight(Knights knight) {
-        this.knight = knight;
     }
 
     public Player getOwner() {
@@ -114,6 +112,11 @@ public class Knight {
         if (this.AP > 5) this.AP = 5;
     }
 
+    public void subAP(int AP) {
+        this.AP -= AP;
+        if (this.AP > 5) this.AP = 5;
+    }
+
     public boolean isStunned() {
         return stunned;
     }
@@ -126,23 +129,15 @@ public class Knight {
         return dead;
     }
 
-    public void setDead(boolean dead) {
+    public void setDead(boolean dead)
+    {
         this.dead = dead;
-    }
-
-    public static int calculateBaseAttack(Knight me, Knight enemy) {
-        int damage = max(0, ((me.getAttack() + me.magicAttack)/2) - (int)(enemy.defense*0.3));
-        Random rand = new Random();
-        int speedRand = rand.nextInt(100);
-        if (speedRand < enemy.getSpeed()) {
-            return -1; //dodged
-        }
-        return damage;
+        this.setHP(0);
     }
 
     public Skills findSkill(String name) {
         for (Skills skill : Skills.values()) {
-            if (skill.getName().equals(name)) {
+            if (skill.getName().equalsIgnoreCase(name)) {
                 return skill;
             }
         }
