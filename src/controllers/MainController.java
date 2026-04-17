@@ -1,22 +1,20 @@
 package controllers;
 
 import models.*;
-import models.enums.KnightClass;
-import models.enums.Knights;
-import models.enums.Skills;
-
-import java.util.regex.Matcher;
+import models.enums.KnightType;
+import models.enums.Menu;
+import models.enums.Skill;
 
 public class MainController {
     public Result SeeCharacters(){
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("characters:").append("\n").append("--------------------").append("\n");
-        for(Knights knight : Knights.values()){
+        for(KnightType knight : KnightType.values()){
             stringBuilder.append("Name: ").append(knight.getName()).append(" - Class: ").append(knight.getKnightClass().getKnightName()).append("\n")
                     .append("HP: ").append(knight.getStats().HP()).append(" - Attack: ").append(knight.getStats().attack())
                     .append(" - Magic Attack: ").append(knight.getStats().magicAttack()).append(" - Defense: ").append(knight.getStats().defense())
                     .append(" - Speed: ").append(knight.getStats().speed()).append("\n").append("Skills:");
-            for(Skills skill : knight.getSkills()){
+            for(Skill skill : knight.getSkills()){
                 stringBuilder.append(skill.getName()).append(" - ");
             }
             stringBuilder.delete(stringBuilder.length()-3, stringBuilder.length());
@@ -25,28 +23,9 @@ public class MainController {
         return new Result(true,  stringBuilder.toString()); //TODO: add customized
     }
 
-    public Result customizeKnight(Matcher matcher) {
-        String name  = matcher.group("name");
-        String knightClass = matcher.group("knightClass");
-        if (name == null || knightClass == null) {
-            return new Result(false, "Invalid Command");
-        }
-        Knights tmp = App.getGame().findKnightByName("name");
-        KnightClass kc = null;
-        if (tmp != null) return new Result(false, "Knight already exists");
-        for (KnightClass kcTmp : KnightClass.values()) {
-            if (kcTmp.getKnightName().equalsIgnoreCase(knightClass)) {
-                kc = kcTmp;
-                break;
-            }
-        }
-        if (kc == null) return new Result(false, "Knight class not found");
-
-    }
-
-    public Result Play(Matcher matcher){
-        Player otherPlayer = App.getPlayerByUsername(matcher.group("username"));
-        if (matcher.group("username").equals(App.getMainPlayer().getName())) {
+    public Result Play(String username){
+        Player otherPlayer = App.getPlayerByUsername(username);
+        if (username.equalsIgnoreCase(App.getMainPlayer().getName())) {
             return new Result(false,  "You can't play with yourself");
         }
         if (otherPlayer == null) {
@@ -57,7 +36,7 @@ public class MainController {
     }
 
     public Result chooseKnight(Game game, String inputName, int index) {
-        Knights chosen = game.findKnightByName(inputName.trim());
+        KnightType chosen = game.findKnightByName(inputName.trim());
 
         if (chosen == null) {
             return new Result(false, "Invalid knight name!");
@@ -101,13 +80,14 @@ public class MainController {
     }
 
     public void playOutro() {
-        App.getGame().getQueue().poll();
-        App.setGotoGame(true);
+        Knight knight = App.getGame().getQueue().poll();
+        App.getGame().getQueue().offer(knight);
+        App.setCurrentMenu(Menu.GameMenu);
     }
 
     public Result Logout(){
         App.setMainPlayer(null);
-        App.setGotoSignup(true);
+        App.setCurrentMenu(Menu.SignupMenu);
         return new Result(true,  "Logout successful");
     }
 
@@ -116,7 +96,7 @@ public class MainController {
     }
 
     public Result exit() {
-        App.setExit(true);
+        App.setCurrentMenu(Menu.ExitMenu);
         return new  Result(true, "");
     }
 

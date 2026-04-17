@@ -7,7 +7,7 @@ public enum MainCommands implements Command {
     ShowCurrentMenu ("^\\s*show\\s+current\\s+menu\\s*$"),
     Exit ("^\\s*exit\\s*$"),
     KnightsDetails("\\s*knights\\s+details\\s*"),
-    CustomizeKnight("\\s*customize\\s+knight\\s+-k\\s+(?<name>.*)\\s+-c(?<knightClass>\\w+)\\s*"),
+    //CustomizeKnight("\\s*customize\\s+knight\\s+-k\\s+(?<name>.*)\\s+-c(?<knightClass>\\w+)\\s*"),
     Play("\\s*play\\s+against\\s+(?<username>.*)\\s*"),
     LogOut("\\s*logout\\s*"),
     ;
@@ -19,11 +19,7 @@ public enum MainCommands implements Command {
     }
 
     @Override
-    public Matcher getMatcher(String input) {
-        Matcher matcher = Pattern.compile(this.pattern).matcher(input);
-        if (matcher.matches()) {
-            return matcher;
-        }
-        return null;
+    public String getMatcher() {
+        return pattern;
     }
 }

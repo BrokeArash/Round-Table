@@ -1,6 +1,6 @@
 package models;
 
-import models.enums.Knights;
+import models.enums.KnightType;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -16,9 +16,14 @@ public class Game {
 
     private Queue<Knight> queue =  new ArrayDeque<>();
 
+    private Player winner;
+    private Player loser;
+
     public Game(Player player1, Player player2) {
         this.player1 = player1;
         this.player2 = player2;
+        this.winner = null;
+        this.loser = null;
     }
 
     public Player getPlayer1() {
@@ -49,8 +54,24 @@ public class Game {
         this.currentKnight = currentKnight;
     }
 
-    public Knights findKnightByName(String name) {
-        for (Knights knight : Knights.values()) {
+    public Player getWinner() {
+        return winner;
+    }
+
+    public void setWinner(Player winner) {
+        this.winner = winner;
+    }
+
+    public Player getLoser() {
+        return loser;
+    }
+
+    public void setLoser(Player loser) {
+        this.loser = loser;
+    }
+
+    public KnightType findKnightByName(String name) {
+        for (KnightType knight : KnightType.values()) {
             if(knight.getName().equalsIgnoreCase(name)) {
                 return knight;
             }
@@ -97,6 +118,7 @@ public class Game {
                 continue;
             }else if (tmp.isStunned()) {
                 this.getQueue().offer(tmp);
+                tmp.setStunned(false);
                 continue;
             }
             flag = true;
@@ -104,4 +126,19 @@ public class Game {
         this.setCurrentKnight(tmp);
         this.getQueue().offer(tmp);
     }
+
+    public boolean checkEnd() {
+        if (knights1.get(0).isDead() && knights1.get(1).isDead()) {
+            setLoser(player1);
+            setWinner(player2);
+            return true;
+        }
+        else if (knights2.get(0).isDead() && knights2.get(1).isDead()) {
+            setLoser(player2);
+            setWinner(player1);
+            return true;
+        }
+        return false;
+    }
+
 }

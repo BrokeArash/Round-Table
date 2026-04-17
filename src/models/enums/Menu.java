@@ -8,6 +8,7 @@ public enum Menu {
     SignupMenu("signup menu", new SignupMenu()),
     MainMenu("main menu", new MainMenu()),
     GameMenu("game menu", new GameMenu()),
+    ExitMenu("exit menu", new ExitMenu())
     ;
 
     private final AppMenu menu;

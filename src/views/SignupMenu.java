@@ -14,42 +14,28 @@ public class SignupMenu implements AppMenu {
     @Override
     public void check(Scanner scanner) {
         String input = scanner.nextLine();
-        SignupCommands matched = null;
-        for (SignupCommands command : SignupCommands.values()) {
-            Matcher matcher = command.getMatcher(input);
-            if (matcher != null && matcher.matches()) {
-                matched = command;
-                break;
-            }
-        }
+        Matcher matcher;
+        Result result;
 
-        if (matched == null ||
-            matched == SignupCommands.CheckUsername ||
-            matched == SignupCommands.CheckPass ||
-            matched == SignupCommands.CheckEmail) {
-            System.out.println("Invalid command!");
+        if ((matcher = SignupCommands.ShowCurrentMenu.isMatch(input)) != null) {
+            result = controller.showCurrentMenu();
+            System.out.println(result);
+        } else if ((matcher = SignupCommands.Exit.isMatch(input)) != null) {
+            result = controller.exit();
+            System.out.println(result);
+        } else if ((matcher = SignupCommands.Signup.isMatch(input)) != null) {
+            String username = matcher.group("username");
+            String password = matcher.group("password");
+            result = controller.register(username, password);
+            System.out.println(result);
+        } else  if ((matcher = SignupCommands.Login.isMatch(input)) != null) {
+            String username = matcher.group("username");
+            String password = matcher.group("password");
+            result = controller.login(username, password);
+            System.out.println(result);
         } else {
-            switch(matched) {
-                case ShowCurrentMenu:
-                    Result result = controller.showCurrentMenu();
-                    System.out.println(result);
-                    break;
-                case Exit:
-                    result = controller.exit();
-                    System.out.println(result);
-                    break;
-                case Signup:
-                    Matcher matcher = SignupCommands.Signup.getMatcher(input);
-                    result = controller.register(matcher);
-                    System.out.println(result);
-                    break;
-                case Login:
-                    Matcher loginMatcher = SignupCommands.Login.getMatcher(input);
-                    result = controller.login(loginMatcher);
-                    System.out.println(result);
-                    break;
-
-            }
+            System.out.println("invalid command!");
         }
+
     }
 }

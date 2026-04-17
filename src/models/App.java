@@ -10,12 +10,6 @@ public class App {
     private static Player mainPlayer;
     private static Player otherPlayer;
 
-    /* Requests */
-    private static boolean gotoSignup;
-    private static boolean loginSuccessful;
-    private static boolean gotoGame;
-    private static boolean exit;
-
     private static Game game;
 
     public static ArrayList<Player> getPlayers() {
@@ -66,38 +60,5 @@ public class App {
                 return player;
         }
         return null;
-    }
-
-    /* Requests Getters & Setters */
-    public static boolean isGotoSignup() {
-        return gotoSignup;
-    }
-
-    public static void setGotoSignup(boolean gotoSignup) {
-        App.gotoSignup = gotoSignup;
-    }
-
-    public static boolean isLoginSuccessful() {
-        return loginSuccessful;
-    }
-
-    public static void setLoginSuccessful(boolean loginSuccessful) {
-        App.loginSuccessful = loginSuccessful;
-    }
-
-    public static boolean isGotoGame() {
-        return gotoGame;
-    }
-
-    public static void setGotoGame(boolean gotoGame) {
-        App.gotoGame = gotoGame;
-    }
-
-    public static boolean isExit() {
-        return exit;
-    }
-
-    public static void setExit(boolean exit) {
-        App.exit = exit;
     }
 }

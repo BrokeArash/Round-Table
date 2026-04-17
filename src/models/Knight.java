@@ -1,17 +1,16 @@
 package models;
 
-import models.enums.KnightClass;
-import models.enums.Knights;
-import models.enums.Skills;
+import models.enums.KnightType;
+import models.enums.Skill;
 
 
 import static java.lang.Math.max;
 
 public class Knight {
-    private final Knights knight;
+    private final KnightType knight;
     private final Player owner;
     private Knight teammate;
-    private int HP;
+    private int HP; //stats
     private int attack;
     private int defense;
     private int magicAttack;
@@ -20,10 +19,12 @@ public class Knight {
     private boolean dead;
     private int AP;
 
+    private int totalDamageDealt;
+
     private Charm charm;
 
 
-    public Knight(Knights knight, Player owner) {
+    public Knight(KnightType knight, Player owner) {
         this.knight = knight;
         this.owner = owner;
         this.HP = knight.getStats().HP();
@@ -35,10 +36,11 @@ public class Knight {
         this.dead = false;
         this.AP = 100;
         this.charm = new Charm();
+        this.totalDamageDealt = 0;
 
     }
 
-    public Knights getKnight() {
+    public KnightType getKnight() {
         return knight;
     }
 
@@ -108,12 +110,12 @@ public class Knight {
 
     public void addAP(int AP) {
         this.AP += AP;
-        if (this.AP > 5) this.AP = 5;
+        //if (this.AP > 5) this.AP = 5;
     }
 
     public void subAP(int AP) {
         this.AP -= AP;
-        if (this.AP > 5) this.AP = 5;
+        //if (this.AP > 5) this.AP = 5;
     }
 
     public boolean isStunned() {
@@ -134,8 +136,28 @@ public class Knight {
         this.setHP(0);
     }
 
-    public Skills findSkill(String name) {
-        for (Skills skill : Skills.values()) {
+    public int getTotalDamageDealt() {
+        return totalDamageDealt;
+    }
+
+    public void addTotalDamageDealt(int totalDamageDealt) {
+        this.totalDamageDealt += totalDamageDealt;
+    }
+
+    public int calculatePoint() {
+        int maxHP = this.getKnight().getStats().HP();
+        int damageTaken = max(maxHP - this.HP, 0);
+        int point = this.totalDamageDealt - damageTaken;
+
+        if (!isDead())
+            point *= 1.5;
+
+        return point;
+    }
+
+
+    public Skill findSkill(String name) {
+        for (Skill skill : Skill.values()) {
             if (skill.getName().equalsIgnoreCase(name)) {
                 return skill;
             }

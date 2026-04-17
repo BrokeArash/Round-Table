@@ -3,7 +3,7 @@ package models.enums;
 import models.Knight;
 import models.Result;
 
-public enum Skills {
+public enum Skill {
 
     // ================= COMMANDER =================
     ShieldBash("Shield Bash", 3, KnightClass.Commander, true, true,
@@ -228,7 +228,7 @@ public enum Skills {
 
     public abstract Result perform(Knight myKnight, Knight enemyKnight);
 
-    Skills(String name, int AP, KnightClass knightClass, boolean enemy, boolean needDashK, String description) {
+    Skill(String name, int AP, KnightClass knightClass, boolean enemy, boolean needDashK, String description) {
         this.name = name;
         this.AP = AP;
         this.knightClass = knightClass;
@@ -248,7 +248,7 @@ public enum Skills {
 
     protected Result applyDamage(Knight attacker, Knight target, int dmg, String skill, boolean stun) {
         StringBuilder sb = new StringBuilder();
-
+        attacker.addTotalDamageDealt(dmg);
         target.decreaseHP(dmg);
 
         if (stun) target.setStunned(true);

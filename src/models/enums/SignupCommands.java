@@ -14,7 +14,6 @@ public enum SignupCommands implements Command {
             "-password\\s+(?<password>.*)\\s*"),
     CheckUsername("^[a-zA-Z][a-zA-Z0-9_]*$"),
     CheckPass("^(?=[A-Za-z])(?=.+[%@#$^&!]).+$"),
-    CheckEmail ("^[a-zA-Z0-9.]+@[a-zA-Z]+(?:\\.[a-zA-Z]+)?\\.com$"),
     ;
 
     private final String pattern;
@@ -24,11 +23,7 @@ public enum SignupCommands implements Command {
     }
 
     @Override
-    public Matcher getMatcher(String input) {
-        Matcher matcher = Pattern.compile(this.pattern).matcher(input);
-        if (matcher.matches()) {
-            return matcher;
-        }
-        return null;
+    public String getMatcher() {
+        return pattern;
     }
 }

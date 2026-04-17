@@ -3,28 +3,22 @@ package controllers;
 import models.App;
 import models.Player;
 import models.Result;
+import models.enums.Menu;
 import models.enums.SignupCommands;
 
 import java.util.regex.Matcher;
 
 public class SignupController {
-    public Result register(Matcher matcher) {
-        String username = matcher.group("username");
-        String password = matcher.group("password");
-        //String email = matcher.group("email");
+    public Result register(String username, String password) {
 
-        Matcher usernameMatcher = SignupCommands.CheckUsername.getMatcher(username);
-        Matcher passwordMatcher = SignupCommands.CheckPass.getMatcher(password);
-        //Matcher emailMatcher = SignupCommands.CheckEmail.getMatcher(email);
 
-        if(usernameMatcher == null)
+
+        if((SignupCommands.CheckUsername.isMatch(username)) == null)
             return new Result(false, "Invalid username!");
         else if (App.getPlayerByUsername(username) != null)
             return new Result(false, "Username already exists!");
-        else if (passwordMatcher == null)
+        else if ((SignupCommands.CheckPass.isMatch(password)) == null)
             return new Result(false, "Invalid password!");
-//        else if (emailMatcher == null)
-//            return new Result(false, "Invalid email!");
         else {
             Player newPlayer = new Player(username, password);
             App.getPlayers().add(newPlayer);
@@ -32,9 +26,8 @@ public class SignupController {
         }
     }
 
-    public Result login(Matcher matcher) {
-        String username = matcher.group("username");
-        String password = matcher.group("password");
+    public Result login(String username, String password) {
+
         Player player = App.getPlayerByUsername(username);
 
         if (player == null)
@@ -43,7 +36,7 @@ public class SignupController {
             return new Result(false, "Password incorrect!");
         else {
             App.setMainPlayer(player);
-            App.setLoginSuccessful(true);
+            App.setCurrentMenu(Menu.MainMenu);
             return new Result(true, "Logged in successfully!");
         }
     }
@@ -53,7 +46,7 @@ public class SignupController {
     }
 
     public Result exit() {
-        App.setExit(true);
+        App.setCurrentMenu(Menu.ExitMenu);
         return new  Result(true, "");
     }
 }

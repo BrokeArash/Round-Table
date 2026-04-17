@@ -10,28 +10,8 @@ public class AppView {
         Scanner scanner = new Scanner(System.in);
         App.setCurrentMenu(Menu.SignupMenu);
 
-        do {
+        while(App.getCurrentMenu() != Menu.ExitMenu) {
             App.getCurrentMenu().checkCommand(scanner);
-
-            /* go to signup menu */
-            if (App.isGotoSignup()) {
-                App.setGotoSignup(false);
-                App.setCurrentMenu(Menu.SignupMenu);
-            }
-            /* is login successful */
-            else if (App.isLoginSuccessful()) {
-                App.setLoginSuccessful(false);
-                App.setCurrentMenu(Menu.MainMenu);
-            }
-
-            /* is go to game successful */
-            else if (App.isGotoGame()) {
-                App.setGotoGame(false);
-                App.setCurrentMenu(Menu.GameMenu);
-            }
-
-
         }
-        while (!App.isExit());
     }
 }
