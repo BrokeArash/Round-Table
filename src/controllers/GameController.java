@@ -4,9 +4,8 @@ import models.App;
 import models.Charm;
 import models.Knight;
 import models.Result;
+import models.enums.KnightClass;
 import models.enums.Skills;
-
-import java.util.Random;
 import java.util.regex.Matcher;
 
 import static java.lang.Math.max;
@@ -47,9 +46,10 @@ public class GameController {
 
     public int calculateBaseAttack(Knight me, Knight enemy) {
         int damage = max(0, ((me.getAttack() + me.getMagicAttack())/2) - (int)(enemy.getDefense()*0.3));
-        Random rand = new Random();
-        int speedRand = rand.nextInt(100);
-        if (speedRand < enemy.getSpeed()) {
+        int attack = me.getAttack();
+        if(me.getKnight().getKnightClass().equals(KnightClass.Healer) || me.getKnight().getKnightClass().equals(KnightClass.Mage))
+            attack = me.getMagicAttack();
+        if (attack < enemy.getSpeed()) {
             return -1; //dodged
         }
         return damage;
@@ -101,12 +101,15 @@ public class GameController {
         }
         String enKnight = null;
         if (matcher.group("knight") != null) {
+            if (!skill.isNeedDashK())
+                return new Result(false, "this skill doesn't need target");
             enKnight = matcher.group("knight");
             if (skill.isEnemy()) enemyKnight = App.getGame().findEnemyKnightByName(enKnight);
             else  enemyKnight = App.getGame().findTeamKnightByName(enKnight);
         }
         else enemyKnight = App.getGame().getEnemyKnight();
-
+        if (skill.isNeedDashK() && matcher.group("knight") == null)
+            return new Result(false, "this skill needs a target");
 
         if (myKnight.getAP() >= skill.getAP()) {
             myKnight.subAP(skill.getAP());

@@ -4,7 +4,6 @@ import models.enums.KnightClass;
 import models.enums.Knights;
 import models.enums.Skills;
 
-import java.util.Random;
 
 import static java.lang.Math.max;
 
@@ -34,7 +33,7 @@ public class Knight {
         this.speed = knight.getStats().speed();
         this.stunned = false;
         this.dead = false;
-        this.AP = 3;
+        this.AP = 100;
         this.charm = new Charm();
 
     }

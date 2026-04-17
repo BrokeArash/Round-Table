@@ -41,12 +41,16 @@ public class MainMenu implements AppMenu {
                     result = controller.SeeCharacters();
                     System.out.println(result);
                     break;
+                case CustomizeKnight:
+                    Matcher matcher = MainCommands.CustomizeKnight.getMatcher(input);
+                    result = controller.customizeKnight(matcher);
+                    System.out.println(result);
                 case LogOut:
                     result = controller.Logout();
                     System.out.println(result);
                     break;
                 case Play:
-                    Matcher matcher = MainCommands.Play.getMatcher(input);
+                    matcher = MainCommands.Play.getMatcher(input);
                     result = controller.Play(matcher);
                     System.out.println(result);
                     if(result.isTrue()) {

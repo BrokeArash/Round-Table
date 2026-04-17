@@ -1,6 +1,7 @@
 package controllers;
 
 import models.*;
+import models.enums.KnightClass;
 import models.enums.Knights;
 import models.enums.Skills;
 
@@ -22,6 +23,25 @@ public class MainController {
             stringBuilder.append("\n").append("--------------------").append("\n");
         }
         return new Result(true,  stringBuilder.toString()); //TODO: add customized
+    }
+
+    public Result customizeKnight(Matcher matcher) {
+        String name  = matcher.group("name");
+        String knightClass = matcher.group("knightClass");
+        if (name == null || knightClass == null) {
+            return new Result(false, "Invalid Command");
+        }
+        Knights tmp = App.getGame().findKnightByName("name");
+        KnightClass kc = null;
+        if (tmp != null) return new Result(false, "Knight already exists");
+        for (KnightClass kcTmp : KnightClass.values()) {
+            if (kcTmp.getKnightName().equalsIgnoreCase(knightClass)) {
+                kc = kcTmp;
+                break;
+            }
+        }
+        if (kc == null) return new Result(false, "Knight class not found");
+
     }
 
     public Result Play(Matcher matcher){
@@ -85,8 +105,6 @@ public class MainController {
         App.setGotoGame(true);
     }
 
-
-
     public Result Logout(){
         App.setMainPlayer(null);
         App.setGotoSignup(true);
@@ -101,4 +119,6 @@ public class MainController {
         App.setExit(true);
         return new  Result(true, "");
     }
+
+
 }

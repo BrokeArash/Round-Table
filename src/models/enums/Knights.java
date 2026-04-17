@@ -13,7 +13,7 @@ public enum Knights {
             List.of(Skills.ShieldBash, Skills.Rally, Skills.ArmorBreak, Skills.StrikeCommand), true),
     Lancelot("Lancelot", KnightClass.Warrior,
             new KnightStats(170, 60, 5, 90, 50),
-            List.of(Skills.Slash, Skills.HeavyStrike, Skills.LifeSteal, Skills.TrialByCombat), true),
+            List.of(Skills.Slash, Skills.HeavyStrike, Skills.LifeSteal, Skills.Berserk), true),
 //    Percival("Percival", KnightClass.Warrior,
 //            new KnightStats(160, 65, 5, 70, 40),
 //            List.of(Skills.Slash, Skills.HeavyStrike, Skills.Rage, Skills.Berserk), true),
