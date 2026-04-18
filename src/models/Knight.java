@@ -8,8 +8,6 @@ import static java.lang.Math.max;
 
 public class Knight {
     private final KnightType knight;
-    private final Player owner;
-    private Knight teammate;
     private int HP; //stats
     private int attack;
     private int defense;
@@ -24,14 +22,13 @@ public class Knight {
     private Charm charm;
 
 
-    public Knight(KnightType knight, Player owner) {
+    public Knight(KnightType knight) {
         this.knight = knight;
-        this.owner = owner;
-        this.HP = knight.getStats().HP();
-        this.attack = knight.getStats().attack();
-        this.defense = knight.getStats().defense();
-        this.magicAttack = knight.getStats().magicAttack();
-        this.speed = knight.getStats().speed();
+        this.HP = knight.getHP();
+        this.attack = knight.getAttack();
+        this.defense = knight.getDefense();
+        this.magicAttack = knight.getMagicAttack();
+        this.speed = knight.getSpeed();
         this.stunned = false;
         this.dead = false;
         this.AP = 100;
@@ -44,16 +41,15 @@ public class Knight {
         return knight;
     }
 
-    public Player getOwner() {
-        return owner;
-    }
 
     public Knight getTeammate() {
-        return teammate;
-    }
-
-    public void setTeammate(Knight teammate) {
-        this.teammate = teammate;
+        Player player = App.getGame().getCurrentPlayer();
+        for (Knight knight : player.getKnights()) {
+            if (!knight.getKnight().equals(player.getCurrentKnight())) {
+                return knight;
+            }
+        }
+        return null; //must never happen
     }
 
     public Charm getCharm() {
@@ -76,32 +72,16 @@ public class Knight {
         return (int)(attack*charm.getAttack());
     }
 
-    public void setAttack(int attack) {
-        this.attack = attack;
-    }
-
     public int getDefense() {
         return (int)(defense* charm.getDefense());
-    }
-
-    public void setDefense(int defense) {
-        this.defense = defense;
     }
 
     public int getMagicAttack() {
         return (int)(magicAttack* charm.getMagic());
     }
 
-    public void setMagicAttack(int magicAttack) {
-        this.magicAttack = magicAttack;
-    }
-
     public int getSpeed() {
         return (int)(speed*charm.getSpeed());
-    }
-
-    public void setSpeed(int speed) {
-        this.speed = speed;
     }
 
     public int getAP() {
@@ -110,12 +90,12 @@ public class Knight {
 
     public void addAP(int AP) {
         this.AP += AP;
-        //if (this.AP > 5) this.AP = 5;
+        if (this.AP > 5) this.AP = 5;
     }
 
     public void subAP(int AP) {
         this.AP -= AP;
-        //if (this.AP > 5) this.AP = 5;
+        if (this.AP > 5) this.AP = 5;
     }
 
     public boolean isStunned() {
@@ -145,7 +125,7 @@ public class Knight {
     }
 
     public int calculatePoint() {
-        int maxHP = this.getKnight().getStats().HP();
+        int maxHP = this.getKnight().getHP();
         int damageTaken = max(maxHP - this.HP, 0);
         int point = this.totalDamageDealt - damageTaken;
 
@@ -167,6 +147,6 @@ public class Knight {
 
     @Override
     public String toString() {
-        return this.getKnight().getName();
+        return this.getKnight().toString();
     }
 }

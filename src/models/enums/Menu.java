@@ -7,8 +7,9 @@ import java.util.Scanner;
 public enum Menu {
     SignupMenu("signup menu", new SignupMenu()),
     MainMenu("main menu", new MainMenu()),
+    ScoreBoardMenu("scoreboard menu", new ScoreboardMenu()),
     GameMenu("game menu", new GameMenu()),
-    ExitMenu("exit menu", new ExitMenu())
+    ExitMenu("exit menu", new ExitMenu()),
     ;
 
     private final AppMenu menu;

@@ -11,37 +11,60 @@ import static java.lang.Math.max;
 
 public class GameController {
 
-    public Result Attack(String name) {
-        Knight myKnight = App.getGame().getCurrentKnight();
+    public Result showCurrentMenu() {
+        return new Result(true, "current menu: " + App.getCurrentMenu().toString());
+    }
 
-        Knight enemy = App.getGame().findEnemyKnightByName(name);
-        if (myKnight.getKnight().getName().equals(name) && enemy == null) {
-            return new Result(false, "you can't attack yourself");
-        }
-        if(myKnight.getTeammate().getKnight().getName().equals(name) && enemy == null) {
-            return new Result(false, "you can't attack your own teammate");
-        }
+    public Result exit() {
+        App.setCurrentMenu(Menu.ExitMenu);
+        return new  Result(true, "");
+    }
 
-        if (enemy == null) {
-            return new Result(false, "enemy doesn't exist");
+    public Result showTurn() {
+        String name = App.getGame().getCurrentPlayer().getName();
+        return new Result(true, "you are now playing " + name + "'s " + App.getGame().getCurrentPlayer().getCurrentKnight().toString());
+    }
+
+    public Result skipTurn() {
+        App.getGame().nextTurn();
+        return new Result(true, App.getGame().getCurrentPlayer().getCurrentKnight() + " is playing...");
+    }
+
+    public Result showSkills() {
+        Knight myKnight = App.getGame().getCurrentPlayer().getCurrentKnight();
+        StringBuilder stringBuilder = new StringBuilder();
+        for(Skill skill : myKnight.getKnight().getSkills()){
+            stringBuilder.append(skill.getName()).append("->").append(" AP: ").append(skill.getAP()).append("\n--------------------\n");
         }
-        int damageDealt = calculateBaseAttack(myKnight, enemy);
-        if (damageDealt < 0) {
-            App.getGame().nextTurn();
-            return new Result(true, "enemy dodged!!!");
-        } else {
-            myKnight.addTotalDamageDealt(damageDealt);
-            StringBuilder stringBuilder = new StringBuilder();
-            enemy.decreaseHP(damageDealt);
-            stringBuilder.append("you dealt ").append(damageDealt).append("\n");
-            if (enemy.getHP() <= 0) {
-                enemy.setDead(true);
-                stringBuilder.append(enemy.getKnight().getName()).append(" is dead!!!");
-                return new Result(true, stringBuilder.toString());
-            }
-            App.getGame().nextTurn();
-            return new Result(true, stringBuilder.toString());
-        }
+        return new Result(true, stringBuilder.toString());
+    }
+
+    public Result showCharms() {
+        Knight myKnight = App.getGame().getCurrentPlayer().getCurrentKnight();
+        StringBuilder stringBuilder = new StringBuilder();
+        Charm myCharm = myKnight.getCharm();
+        if (myCharm.getHP() > 1) stringBuilder.append("HP got buffed by: ").append((int)(myCharm.getHP()*100)-100).append("%\n");
+        else if (myCharm.getHP() < 1) stringBuilder.append("HP got nerfed by: ").append((int)(myCharm.getHP()*100)-100).append("%\n");
+
+        if (myCharm.getAttack() > 1) stringBuilder.append("attack got buffed by: ").append((int)(myCharm.getAttack()*100)-100).append("%\n");
+        else if (myCharm.getHP() < 1) stringBuilder.append("attack got nerfed by: ").append((int)(myCharm.getAttack()*100)-100).append("%\n");
+
+        if (myCharm.getMagic() > 1) stringBuilder.append("magic attack got buffed by: ").append((int)(myCharm.getMagic()*100)-100).append("%\n");
+        else if (myCharm.getMagic() < 1) stringBuilder.append("magic attack got nerfed by: ").append((int)(myCharm.getMagic()*100)-100).append("%\n");
+
+        if (myCharm.getDefense() > 1) stringBuilder.append("defense got buffed by: ").append((int)(myCharm.getDefense()*100)-100).append("%\n");
+        else if (myCharm.getDefense() < 1) stringBuilder.append("defense got nerfed by: ").append((int)(myCharm.getDefense()*100)-100).append("%\n");
+
+        if (myCharm.getSpeed() > 1) stringBuilder.append("speed got buffed by: ").append((int)(myCharm.getSpeed()*100)-100).append("%\n");
+        else if (myCharm.getSpeed() < 1) stringBuilder.append("speed got nerfed by: ").append((int)(myCharm.getSpeed()*100)-100).append("%\n");
+
+        if (stringBuilder.isEmpty()) return new  Result(true, "you have no charms on yourself");
+        return new Result(true, stringBuilder.toString());
+    }
+
+    public Result showAP() {
+        Knight tmp = App.getGame().getCurrentPlayer().getCurrentKnight();
+        return new Result(true, tmp.toString() + "'s AP: " + App.getGame().getCurrentPlayer().getCurrentKnight().getAP() + "\n");
     }
 
     public Result showStats(String name, boolean enemy) {
@@ -51,33 +74,58 @@ public class GameController {
         else knight = App.getGame().findTeamKnightByName(name);
 
         if (knight == null) {
-            if (name.equals(App.getGame().getCurrentKnight().getKnight().getName())) knight = App.getGame().getCurrentKnight();
-            else if (name.equals(App.getGame().getCurrentKnight().getTeammate().getKnight().getName())) knight = App.getGame().getCurrentKnight().getTeammate();
+            if (name.equalsIgnoreCase(App.getGame().getCurrentPlayer().getCurrentKnight().toString())) knight = App.getGame().getCurrentPlayer().getCurrentKnight();
+            else if (name.equalsIgnoreCase(App.getGame().getCurrentPlayer().getCurrentKnight().getTeammate().toString())) knight = App.getGame().getCurrentPlayer().getCurrentKnight().getTeammate();
         }
         if (knight == null) {
             return new Result(false, "knight doesn't exist");
         }
-        stringBuilder.append("Name: ").append(knight.getKnight().getName()).append(" - Class: ").append(knight.getKnight().getKnightClass().getKnightName()).append("\n")
-                .append("HP: ").append(knight.getHP()).append(" - Attack: ").append(knight.getAttack())
-                .append(" - Magic Attack: ").append(knight.getMagicAttack()).append(" - Defense: ").append(knight.getDefense())
-                .append(" - Speed: ").append(knight.getSpeed()).append("\n");
+        stringBuilder.append("name: ").append(knight.toString()).append(" - class: ").append(knight.getKnight().getKnightClass().getKnightName()).append("\n")
+                .append("HP: ").append(knight.getHP()).append(" - attack: ").append(knight.getAttack())
+                .append(" - magic attack: ").append(knight.getMagicAttack()).append(" - defense: ").append(knight.getDefense())
+                .append(" - speed: ").append(knight.getSpeed()).append("\n");
         return new Result(true, stringBuilder.toString());
     }
 
-    public Result skillDetails() {
-        Knight myKnight = App.getGame().getCurrentKnight();
-        StringBuilder stringBuilder = new StringBuilder();
-        for(Skill skill : myKnight.getKnight().getSkills()){
-            stringBuilder.append(skill.getName()).append("->").append(" AP: ").append(skill.getAP())
-                    .append(" description: ")
-                    .append(skill.getDescription()).append("\n--------------------\n");
+    public Result Attack(String name) {
+        Knight myKnight = App.getGame().getCurrentPlayer().getCurrentKnight();
+
+        Knight enemy = App.getGame().findEnemyKnightByName(name);
+        if (myKnight.toString().equalsIgnoreCase(name) && enemy == null) {
+            return new Result(false, "you can't attack yourself");
         }
+        if(myKnight.getTeammate().toString().equalsIgnoreCase(name) && enemy == null) {
+            return new Result(false, "you can't attack your own teammate");
+        }
+
+        if (enemy == null) {
+            return new Result(false, "enemy doesn't exist");
+        }
+        int damageDealt = calculateBaseAttack(myKnight, enemy);
+        if (damageDealt < 0) {
+            App.getGame().nextTurn();
+            return new Result(true, "enemy dodged!");
+        }
+
+        myKnight.addTotalDamageDealt(damageDealt);
+        StringBuilder stringBuilder = new StringBuilder();
+        enemy.decreaseHP(damageDealt);
+        stringBuilder.append("you dealt ").append(damageDealt).append("\n");
+        if (enemy.getHP() <= 0) {
+            enemy.setDead(true);
+            stringBuilder.append(enemy.toString()).append(" is dead!");
+            return new Result(true, stringBuilder.toString());
+        }
+        App.getGame().nextTurn();
         return new Result(true, stringBuilder.toString());
+
     }
+
+
 
 
     public Result skill(String skillName, String knight) {
-        Knight myKnight = App.getGame().getCurrentKnight();
+        Knight myKnight = App.getGame().getCurrentPlayer().getCurrentKnight();
         Knight enemyKnight = null;
         Result result = null;
         Skill skill = myKnight.findSkill(skillName.trim());
@@ -94,66 +142,19 @@ public class GameController {
             if (skill.isEnemy()) enemyKnight = App.getGame().findEnemyKnightByName(enKnight);
             else  enemyKnight = App.getGame().findTeamKnightByName(enKnight);
         }
-        else enemyKnight = App.getGame().getEnemyKnight();
+        else enemyKnight = App.getGame().getOtherPlayer().getCurrentKnight();
         if (skill.isNeedDashK() && knight == null)
             return new Result(false, "this skill needs a target");
 
-        if (myKnight.getAP() >= skill.getAP()) {
-            myKnight.subAP(skill.getAP());
-            result = skill.perform(myKnight, enemyKnight);
-            App.getGame().nextTurn();
-        } else {
+        if (myKnight.getAP() < skill.getAP()) {
             return new Result(false, "you don't have enough AP");
         }
 
-        return new Result(true, result.toString());
-    }
-
-    public Result showTurn() {
-        String name = App.getGame().getCurrentKnight().getOwner().getName();
-        return new Result(true, "you are now playing " + name + "'s " + App.getGame().getCurrentKnight().getKnight().getName());
-    }
-
-    public Result showCurrentMenu() {
-        return new Result(true, "current menu: " + App.getCurrentMenu().toString());
-    }
-
-    public Result exit() {
-        App.setCurrentMenu(Menu.ExitMenu);
-        return new  Result(true, "");
-    }
-
-    public Result showAP() {
-        Knight tmp = App.getGame().getCurrentKnight();
-        return new Result(true, tmp.getKnight().getName() + "'s AP: " + App.getGame().getCurrentKnight().getAP() + "\n");
-    }
-
-    public Result skipTurn() {
+        myKnight.subAP(skill.getAP());
+        result = skill.perform(myKnight, enemyKnight);
         App.getGame().nextTurn();
-        return new Result(true, App.getGame().getCurrentKnight() + " is playing...");
-    }
+        return new Result(true, result.toString());
 
-    public Result showCharms() {
-        Knight myKnight = App.getGame().getCurrentKnight();
-        StringBuilder stringBuilder = new StringBuilder();
-        Charm myCharm = myKnight.getCharm();
-        if (myCharm.getHP() > 1) stringBuilder.append("HP got Buffed by: ").append((int)(myCharm.getHP()*100)-100).append("%\n");
-        else if (myCharm.getHP() < 1) stringBuilder.append("HP got Nerfed by: ").append((int)(myCharm.getHP()*100)-100).append("%\n");
-
-        if (myCharm.getAttack() > 1) stringBuilder.append("Attack got Buffed by: ").append((int)(myCharm.getAttack()*100)-100).append("%\n");
-        else if (myCharm.getHP() < 1) stringBuilder.append("Attack got Nerfed by: ").append((int)(myCharm.getAttack()*100)-100).append("%\n");
-
-        if (myCharm.getMagic() > 1) stringBuilder.append("Magic Attack got Buffed by: ").append((int)(myCharm.getMagic()*100)-100).append("%\n");
-        else if (myCharm.getMagic() < 1) stringBuilder.append("Magic Attack got Nerfed by: ").append((int)(myCharm.getMagic()*100)-100).append("%\n");
-
-        if (myCharm.getDefense() > 1) stringBuilder.append("Defense got Buffed by: ").append((int)(myCharm.getDefense()*100)-100).append("%\n");
-        else if (myCharm.getDefense() < 1) stringBuilder.append("Defense got Nerfed by: ").append((int)(myCharm.getDefense()*100)-100).append("%\n");
-
-        if (myCharm.getSpeed() > 1) stringBuilder.append("Speed got Buffed by: ").append((int)(myCharm.getSpeed()*100)-100).append("%\n");
-        else if (myCharm.getSpeed() < 1) stringBuilder.append("Speed got Nerfed by: ").append((int)(myCharm.getSpeed()*100)-100).append("%\n");
-
-        if (stringBuilder.isEmpty()) return new  Result(true, "You have no charms on yourself");
-        return new Result(true, stringBuilder.toString());
     }
 
     public int calculateBaseAttack(Knight me, Knight enemy) {
@@ -167,35 +168,43 @@ public class GameController {
         return damage;
     }
 
-    public Result gameOutro() {
+    public Result gameOutro(Player winner) {
         StringBuilder stringBuilder = new StringBuilder();
         Game game = App.getGame();
-        Player winner = game.getWinner();
-        Player loser = game.getLoser();
+        Player loser = game.getOtherPlayer(winner);
+        winner.addGamesPlayed();
+        winner.addGamesWon();
+        loser.addGamesPlayed();
 
-        for (Knight knight: game.getKnights1()) {
-            knight.getOwner().addPoint(knight.calculatePoint());
+        for (Knight knight: winner.getKnights()) {
+            winner.addPoint(knight.calculatePoint());
+            winner.addDamageDealt(knight.getTotalDamageDealt());
         }
 
-        for (Knight knight: game.getKnights2()) {
-            knight.getOwner().addPoint(knight.calculatePoint());
+        for (Knight knight: loser.getKnights()) {
+            loser.addPoint(knight.calculatePoint());
+            loser.addDamageDealt(knight.getTotalDamageDealt());
         }
 
         stringBuilder.append("war has ended").append("\n").append("--------------------").append("\n")
-                .append("winner: ").append(winner.getName()).append(" points: ").append(winner.getPoint()).append("\n");
+                .append("winner: ").append(winner.getName()).append(" - points: ").append(winner.getPoint()).append("\n");
 
-        if (winner.equals(game.getPlayer1())) {
-            endingStats(stringBuilder, winner, game.getKnights1());
-            stringBuilder.append("loser: ").append(loser.getName()).append(" points: ").append(winner.getPoint()).append("\n");
-            endingStats(stringBuilder, loser, game.getKnights2());
-        }
-         else {
-             endingStats(stringBuilder, winner, game.getKnights2());
-             stringBuilder.append("loser: ").append(loser.getName()).append(" points: ").append(winner.getPoint()).append("\n");
-             endingStats(stringBuilder, loser,  game.getKnights1());
-         }
+
+        endingStats(stringBuilder, winner, winner.getKnights());
+        stringBuilder.append("loser: ").append(loser.getName()).append(" - points: ").append(loser.getPoint()).append("\n");
+        endingStats(stringBuilder, loser, loser.getKnights());
+
+
         App.setCurrentMenu(Menu.MainMenu);
-         return new Result(true, stringBuilder.toString());
+        cleanUp();
+        return new Result(true, stringBuilder.toString());
+
+    }
+
+    private void cleanUp() {
+        for (Player player : App.getPlayers()) {
+            player.getKnights().clear();
+        }
 
     }
 

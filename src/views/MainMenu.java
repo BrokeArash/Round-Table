@@ -2,7 +2,6 @@ package views;
 
 import controllers.MainController;
 import models.App;
-import models.Game;
 import models.Result;
 import models.enums.MainCommands;
 
@@ -23,8 +22,11 @@ public class MainMenu implements AppMenu {
         } else if ((matcher = MainCommands.Exit.isMatch(input)) != null) {
             result = controller.exit();
             System.out.println(result);
-        } else if ((matcher = MainCommands.KnightsDetails.isMatch(input)) != null) {
+        } else if ((matcher = MainCommands.ShowKnightsDetails.isMatch(input)) != null) {
             result = controller.SeeCharacters();
+            System.out.println(result);
+        } else if ((matcher = MainCommands.ScoreBoard.isMatch(input)) != null) {
+            result = controller.gotoScoreboard();
             System.out.println(result);
         } else if ((matcher = MainCommands.LogOut.isMatch(input)) != null) {
             result = controller.Logout();
@@ -34,7 +36,6 @@ public class MainMenu implements AppMenu {
             result = controller.Play(username);
             System.out.println(result);
             if (result.isTrue()) {
-                App.setGame(new Game(App.getMainPlayer(), App.getOtherPlayer()));
                 for (int i = 0; i < 4; i++) {
                     boolean validName = false;
 
@@ -42,10 +43,10 @@ public class MainMenu implements AppMenu {
 
                         if (i < 2) {
                             System.out.println("choosing knight for " +
-                                    App.getGame().getPlayer1().getName() + ":");
+                                    App.getCurrentPlayer().getName() + ":");
                         } else {
                             System.out.println("choosing knight for " +
-                                    App.getGame().getPlayer2().getName() + ":");
+                                    username + ":");
                         }
 
                         String name = scanner.nextLine();
@@ -59,7 +60,7 @@ public class MainMenu implements AppMenu {
                 controller.playOutro();
             }
         } else {
-            System.out.println("invalid command!");
+            System.out.println("invalid command");
         }
     }
 }

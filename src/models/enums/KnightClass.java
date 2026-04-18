@@ -1,14 +1,10 @@
 package models.enums;
 
-import models.KnightStats;
-
-import java.util.List;
-
 public enum KnightClass {
-    Commander("Commander"),
-    Warrior("Warrior"),
-    Mage("Mage"),
-    Healer("Healer"),
+    Commander("commander"),
+    Warrior("warrior"),
+    Mage("mage"),
+    Healer("healer"),
     ;
 
     private final String name;

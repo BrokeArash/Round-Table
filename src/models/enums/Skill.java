@@ -6,17 +6,15 @@ import models.Result;
 public enum Skill {
 
     // ================= COMMANDER =================
-    ShieldBash("Shield Bash", 3, KnightClass.Commander, true, true,
-            "deals damage to 1 enemy and stun him") {
+    ShieldBash("shield bash", 3, true, true) {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
             int dmg = calculatePhysicalDamage(myKnight, enemyKnight);
-            return applyDamage(myKnight, enemyKnight, dmg, "Shield Bash", true);
+            return applyDamage(myKnight, enemyKnight, dmg, "shield bash", true);
         }
     },
 
-    Fortify("Fortify", 1, KnightClass.Commander, false, false,
-            "increases team defense by 20%") {
+    Fortify("fortify", 1, false, false) {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
             myKnight.getCharm().setDefense(1.2);
@@ -25,17 +23,15 @@ public enum Skill {
         }
     },
 
-    StrikeCommand("Strike Command", 5, KnightClass.Commander, true, false,
-            "deals damage to all enemies") {
+    StrikeCommand("strike command", 5, true, false) {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
             int dmg = calculatePhysicalDamage(myKnight, enemyKnight);
-            return applyDamageToBoth(myKnight, enemyKnight, dmg, "Strike Command");
+            return applyDamageToBoth(myKnight, enemyKnight, dmg, "strike command");
         }
     },
 
-    ArmorBreak("Armor Break", 2, KnightClass.Commander, true, false,
-            "lowers enemy defense") {
+    ArmorBreak("armor break", 2, true, false) {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
             enemyKnight.getCharm().setDefense(0.85);
@@ -44,8 +40,7 @@ public enum Skill {
         }
     },
 
-    Rally("Rally", 4, KnightClass.Commander, false, false,
-            "heals team") {
+    Rally("rally", 4, false, false) {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
             heal(myKnight, 0.2);
@@ -55,27 +50,24 @@ public enum Skill {
     },
 
     // ================= WARRIOR =================
-    Slash("Slash", 2, KnightClass.Warrior, true, true,
-            "basic attack") {
+    Slash("slash", 2, true, true) {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
             int dmg = calculatePhysicalDamage(myKnight, enemyKnight);
-            return applyDamage(myKnight, enemyKnight, dmg, "Slash", true);
+            return applyDamage(myKnight, enemyKnight, dmg, "slash", false);
         }
     },
 
-    HeavyStrike("Heavy Strike", 4, KnightClass.Warrior, true, true,
-            "150% damage") {
+    HeavyStrike("heavy strike", 4, true, true) {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
             int dmg = (int)(myKnight.getAttack() * 1.5)
                     - (int)(enemyKnight.getDefense() * 0.3);
-            return applyDamage(myKnight, enemyKnight, dmg, "Heavy Strike", true);
+            return applyDamage(myKnight, enemyKnight, dmg, "heavy strike", false);
         }
     },
 
-    Rage("Rage", 1, KnightClass.Warrior, false, false,
-            "buffs own attack") {
+    Rage("rage", 1, false, false) {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
             myKnight.getCharm().setAttack(1.5);
@@ -83,30 +75,28 @@ public enum Skill {
         }
     },
 
-    LifeSteal("Life Steal", 5, KnightClass.Warrior, true, true,
-            "damage + heal") {
+    LifeSteal("life steal", 5, true, true) {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
             heal(myKnight, 0.1);
             int dmg = calculatePhysicalDamage(myKnight, enemyKnight);
 
-            Result r = applyDamage(myKnight, enemyKnight, dmg, "Life Steal", true);
+            Result r = applyDamage(myKnight, enemyKnight, dmg, "life steal", false);
             return new Result(true, "HP healed 10%\n" + r.message());
         }
     },
 
-    Berserk("Berserk", 3, KnightClass.Warrior, false, false,
-            "lose HP, gain attack") {
+    Berserk("berserk", 3, false, false) {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
             myKnight.getCharm().setHP(0.8);
             myKnight.getCharm().setAttack(1.6);
 
-            String msg = "Berserk activated\n";
+            String msg = "berserk activated\n";
 
             if (myKnight.getHP() <= 0) {
                 myKnight.setDead(true);
-                msg += "you died!!!\n";
+                msg += "you died!\n";
             }
 
             return new Result(true, msg);
@@ -114,36 +104,32 @@ public enum Skill {
     },
 
     // ================= MAGE =================
-    Fireball("Fireball", 2, KnightClass.Mage, true, true,
-            "magic damage") {
+    Fireball("fireball", 2, true, true) {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
             int dmg = calculateMagicDamage(myKnight);
-            return applyDamage(myKnight, enemyKnight, dmg, "Fireball", true);
+            return applyDamage(myKnight, enemyKnight, dmg, "fireball", false);
         }
     },
 
-    LightningStrike("Lightning Strike", 4, KnightClass.Mage, true, false,
-            "hits both enemies") {
+    LightningStrike("lightning strike", 4, true, false) {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
             int dmg = calculateMagicDamage(myKnight);
-            return applyDamageToBoth(myKnight, enemyKnight, dmg, "Lightning Strike");
+            return applyDamageToBoth(myKnight, enemyKnight, dmg, "lightning strike");
         }
     },
 
-    IceBlast("Ice Blast", 3, KnightClass.Mage, true, true,
-            "damage + slow") {
+    IceBlast("ice blast", 3, true, true) {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
             enemyKnight.getCharm().setSpeed(0.8);
             int dmg = calculateMagicDamage(myKnight);
-            return applyDamage(myKnight, enemyKnight, dmg, "Ice Blast", true);
+            return applyDamage(myKnight, enemyKnight, dmg, "ice blast", false);
         }
     },
 
-    ArcaneSurge("Arcane Surge", 3, KnightClass.Mage, false, false,
-            "boost magic") {
+    ArcaneSurge("arcane surge", 3, false, false) {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
             myKnight.getCharm().setMagic(1.3);
@@ -151,8 +137,7 @@ public enum Skill {
         }
     },
 
-    Silence("Silence", 4, KnightClass.Mage, true, true,
-            "stun enemy") {
+    Silence("silence", 4, true, true) {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
             enemyKnight.setStunned(true);
@@ -161,8 +146,7 @@ public enum Skill {
     },
 
     // ================= HEALER =================
-    Heal("Heal", 2, KnightClass.Healer, false, true,
-            "heal self or teammate") {
+    Heal("heal", 2, false, true) {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
             heal(enemyKnight, 0.2);
@@ -170,8 +154,7 @@ public enum Skill {
         }
     },
 
-    GroupHeal("Group Heal", 5, KnightClass.Healer, false, false,
-            "heal team") {
+    GroupHeal("group heal", 5, false, false) {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
             heal(myKnight, 0.2);
@@ -180,8 +163,7 @@ public enum Skill {
         }
     },
 
-    HealerRevive("Healer Revive", 4, KnightClass.Healer, false, false,
-            "revive teammate") {
+    HealerRevive("healer revive", 4, false, false) {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
             Knight t = myKnight.getTeammate();
@@ -191,15 +173,14 @@ public enum Skill {
             }
 
             t.setDead(false);
-            int hp = (int)(t.getKnight().getStats().HP() * 0.1);
+            int hp = (int)(t.getKnight().getHP() * 0.1);
             t.setHP(hp);
 
             return new Result(true, "teammate revived\n");
         }
     },
 
-    Cleanse("Cleanse", 3, KnightClass.Healer, false, false,
-            "remove debuffs") {
+    Cleanse("cleanse", 3, false, false) {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
             resetCharm(myKnight);
@@ -208,8 +189,7 @@ public enum Skill {
         }
     },
 
-    Blessing("Blessing", 3, KnightClass.Healer, false, false,
-            "speed buff") {
+    Blessing("blessing", 3, false, false) {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
             myKnight.getCharm().setSpeed(1.2);
@@ -221,20 +201,16 @@ public enum Skill {
     // ================= FIELDS =================
     private final String name;
     private final int AP;
-    private final KnightClass knightClass;
     private final boolean enemy;
     private final boolean needDashK;
-    private final String description;
 
     public abstract Result perform(Knight myKnight, Knight enemyKnight);
 
-    Skill(String name, int AP, KnightClass knightClass, boolean enemy, boolean needDashK, String description) {
+    Skill(String name, int AP, boolean enemy, boolean needDashK) {
         this.name = name;
         this.AP = AP;
-        this.knightClass = knightClass;
         this.enemy = enemy;
         this.needDashK = needDashK;
-        this.description = description;
     }
 
     // ================= HELPERS =================
@@ -257,12 +233,12 @@ public enum Skill {
                 .append(" dealt ")
                 .append(dmg)
                 .append(" damage to ")
-                .append(target.getKnight().getName())
+                .append(target.toString())
                 .append("\n");
 
         if (target.getHP() <= 0) {
             target.setDead(true);
-            sb.append(target.getKnight().getName()).append(" is dead!!!\n");
+            sb.append(target.toString()).append(" is dead!\n");
         }
 
         return new Result(true, sb.toString());
@@ -278,7 +254,7 @@ public enum Skill {
     }
 
     protected void heal(Knight target, double percent) {
-        int maxHP = target.getKnight().getStats().HP();
+        int maxHP = target.getKnight().getHP();
         int amount = (int)(maxHP * percent);
         if (target.getHP() + amount > maxHP) target.setHP(maxHP);
         else target.decreaseHP(-amount);
@@ -295,8 +271,6 @@ public enum Skill {
     // ================= GETTERS =================
     public String getName() { return name; }
     public int getAP() { return AP; }
-    public KnightClass getKnightClass() { return knightClass; }
     public boolean isEnemy() { return enemy; }
     public boolean isNeedDashK() { return needDashK; }
-    public String getDescription() { return description; }
 }

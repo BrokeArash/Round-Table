@@ -7,8 +7,7 @@ import java.util.ArrayList;
 public class App {
     private static ArrayList<Player> players;
     private static Menu currentMenu;
-    private static Player mainPlayer;
-    private static Player otherPlayer;
+    private static Player currentPlayer;
 
     private static Game game;
 
@@ -16,10 +15,6 @@ public class App {
         if (players == null) players = new ArrayList<>();
 
         return players;
-    }
-
-    public static void setPlayers(ArrayList<Player> players) {
-        App.players = players;
     }
 
     public static Menu getCurrentMenu() {
@@ -30,20 +25,12 @@ public class App {
         App.currentMenu = currentMenu;
     }
 
-    public static Player getMainPlayer() {
-        return mainPlayer;
+    public static Player getCurrentPlayer() {
+        return currentPlayer;
     }
 
-    public static void setMainPlayer(Player mainPlayer) {
-        App.mainPlayer = mainPlayer;
-    }
-
-    public static Player getOtherPlayer() {
-        return otherPlayer;
-    }
-
-    public static void setOtherPlayer(Player otherPlayer) {
-        App.otherPlayer = otherPlayer;
+    public static void setCurrentPlayer(Player currentPlayer) {
+        App.currentPlayer = currentPlayer;
     }
 
     public static Game getGame() {

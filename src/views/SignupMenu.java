@@ -34,7 +34,7 @@ public class SignupMenu implements AppMenu {
             result = controller.login(username, password);
             System.out.println(result);
         } else {
-            System.out.println("invalid command!");
+            System.out.println("invalid command");
         }
 
     }

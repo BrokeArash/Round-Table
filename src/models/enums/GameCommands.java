@@ -1,20 +1,18 @@
 package models.enums;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public enum GameCommands implements Command {
     ShowCurrentMenu ("^\\s*show\\s+current\\s+menu\\s*$"),
     Exit ("^\\s*exit\\s*$"),
-    Attack("\\s*attack\\s+-k\\s+(?<knight>\\w+)\\s*"),
-    SkillsDetails("\\s*skills\\s+details\\s*"),
-    ShowAP("\\s*show\\s+AP\\s*"),
+    ShowTurn("\\s*show\\s+turn\\s*"),
     SkipTurn("\\s*skip\\s+turn\\s*"),
+    ShowSkillsDetails("\\s*show\\s+skills\\s+details\\s*"),
+    ShowCharms("\\s*show\\s+charms\\s*"),
+    ShowAP("\\s*show\\s+AP\\s*"),
     ShowStats("\\s*show\\s+stats\\s+-k\\s+(?<knight>\\w+)\\s*"),
     ShowStatsEnemy("\\s*show\\s+stats\\s+-e\\s+(?<knight>\\w+)\\s*"),
-    ShowCharms("\\s*show\\s+charms\\s*"),
+    Attack("\\s*attack\\s+-k\\s+(?<knight>\\w+)\\s*"),
     Skill("\\s*skill\\s+-s\\s+(?<skill>[^-]+?)(?:\\s+-k\\s+(?<knight>\\w+))?\\s*"),
-    ShowTurn("\\s*show\\s+turn\\s*"),
+
     ;
 
     private final String pattern;

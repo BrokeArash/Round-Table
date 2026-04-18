@@ -1,17 +1,21 @@
 package models.enums;
 
-public enum MainCommands implements Command {
+import views.AppMenu;
+
+import java.util.regex.Matcher;
+
+public enum ScoreboardCommands implements Command {
     ShowCurrentMenu ("^\\s*show\\s+current\\s+menu\\s*$"),
     Exit ("^\\s*exit\\s*$"),
-    LogOut("\\s*logout\\s*"),
-    ShowKnightsDetails("\\s*show\\s+knights\\s+details\\s*"),
-    ScoreBoard("\\s*scoreboard\\s*"),
-    Play("\\s*play\\s+against\\s+(?<username>.*)\\s*"),
+    ShowScoreboard("\\s*show\\s+scoreboard\\s+-t\\s+(?<sort>.*)\\s*"),
+    Back("^\\s*back\\s*$"),
     ;
+
+
 
     private final String pattern;
 
-    MainCommands(String pattern) {
+    ScoreboardCommands(String pattern) {
         this.pattern = pattern;
     }
 
