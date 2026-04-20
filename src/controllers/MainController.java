@@ -6,7 +6,6 @@ import models.enums.Menu;
 import models.enums.Skill;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainController {
 
@@ -19,14 +18,14 @@ public class MainController {
         return new  Result(true, "");
     }
 
-    public Result SeeCharacters(){
+    public Result showKnightsDetails(){
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("characters:").append("\n").append("--------------------").append("\n");
         for(KnightType knight : KnightType.values()){
             stringBuilder.append("name: ").append(knight.toString()).append(" - class: ").append(knight.getKnightClass().getKnightName()).append("\n")
                     .append("HP: ").append(knight.getHP()).append(" - attack: ").append(knight.getAttack())
                     .append(" - magic attack: ").append(knight.getMagicAttack()).append(" - defense: ").append(knight.getDefense())
-                    .append(" - speed: ").append(knight.getSpeed()).append("\n").append("skills:");
+                    .append(" - speed: ").append(knight.getSpeed()).append("\n").append("skills: ");
             for(Skill skill : knight.getSkills()){
                 stringBuilder.append(skill.getName()).append(" - ");
             }
@@ -44,12 +43,12 @@ public class MainController {
     public Result Logout(){
         App.setCurrentPlayer(null);
         App.setCurrentMenu(Menu.SignupMenu);
-        return new Result(true,  "logout successfully");
+        return new Result(true,  "logged out successfully");
     }
 
     public Result Play(String username){
         Player otherPlayer = App.getPlayerByUsername(username);
-        if (username.equalsIgnoreCase(App.getCurrentPlayer().getName())) {
+        if (username.equals(App.getCurrentPlayer().toString())) {
             return new Result(false,  "you can't play with yourself");
         }
         if (otherPlayer == null) {
@@ -59,7 +58,7 @@ public class MainController {
         tmp.add(App.getCurrentPlayer());
         tmp.add(otherPlayer);
         App.setGame(new Game(tmp));
-        return new Result(true,  "you're playing with " + otherPlayer.getName() + "\n");
+        return new Result(true,  "you're playing with " + otherPlayer.toString() + "\n");
     }
 
     public Result chooseKnight(Game game, String inputName, int index) {
@@ -97,6 +96,7 @@ public class MainController {
             newKnight = new Knight(chosen);
             game.getOtherPlayer().getKnights().add(newKnight);
             game.getQueue().add(newKnight);
+            if (index == 2) game.getOtherPlayer().setCurrentKnight(newKnight);
         }
 
         return new Result(true, "knight selected successfully");

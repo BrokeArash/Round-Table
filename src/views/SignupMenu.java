@@ -26,12 +26,12 @@ public class SignupMenu implements AppMenu {
         } else if ((matcher = SignupCommands.Signup.isMatch(input)) != null) {
             String username = matcher.group("username");
             String password = matcher.group("password");
-            result = controller.register(username, password);
+            result = controller.register(username.trim(), password.trim());
             System.out.println(result);
         } else  if ((matcher = SignupCommands.Login.isMatch(input)) != null) {
             String username = matcher.group("username");
             String password = matcher.group("password");
-            result = controller.login(username, password);
+            result = controller.login(username.trim(), password.trim());
             System.out.println(result);
         } else {
             System.out.println("invalid command");

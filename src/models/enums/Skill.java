@@ -1,5 +1,6 @@
 package models.enums;
 
+import models.App;
 import models.Knight;
 import models.Result;
 
@@ -26,16 +27,23 @@ public enum Skill {
     StrikeCommand("strike command", 5, true, false) {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
-            int dmg = calculatePhysicalDamage(myKnight, enemyKnight);
-            return applyDamageToBoth(myKnight, enemyKnight, dmg, "strike command");
+
+            Knight enemy = App.getGame().getOtherPlayer().getCurrentKnight();
+            Knight enemyTeammate = enemy.getTeammate();
+
+            int dmg = calculatePhysicalDamage(myKnight, enemy);
+            int dmgTeam = calculatePhysicalDamage(myKnight, enemyTeammate);
+
+            return applyDamageToBoth(myKnight, enemy, dmg, dmgTeam, "strike command");
         }
     },
 
     ArmorBreak("armor break", 2, true, false) {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
-            enemyKnight.getCharm().setDefense(0.85);
-            enemyKnight.getTeammate().getCharm().setDefense(0.85);
+            Knight enemy = App.getGame().getOtherPlayer().getCurrentKnight();
+            enemy.getCharm().setDefense(0.85);
+            enemy.getTeammate().getCharm().setDefense(0.85);
             return new Result(true, "enemy defense reduced by 15%\n");
         }
     },
@@ -43,6 +51,7 @@ public enum Skill {
     Rally("rally", 4, false, false) {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
+
             heal(myKnight, 0.2);
             heal(myKnight.getTeammate(), 0.2);
             return new Result(true, "team healed by 20%\n");
@@ -67,14 +76,6 @@ public enum Skill {
         }
     },
 
-    Rage("rage", 1, false, false) {
-        @Override
-        public Result perform(Knight myKnight, Knight enemyKnight) {
-            myKnight.getCharm().setAttack(1.5);
-            return new Result(true, "attack buffed by 50%\n");
-        }
-    },
-
     LifeSteal("life steal", 5, true, true) {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
@@ -89,7 +90,7 @@ public enum Skill {
     Berserk("berserk", 3, false, false) {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
-            myKnight.getCharm().setHP(0.8);
+            heal(myKnight, -0.2);
             myKnight.getCharm().setAttack(1.6);
 
             String msg = "berserk activated\n";
@@ -115,8 +116,9 @@ public enum Skill {
     LightningStrike("lightning strike", 4, true, false) {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
+            Knight enemy = App.getGame().getOtherPlayer().getCurrentKnight();
             int dmg = calculateMagicDamage(myKnight);
-            return applyDamageToBoth(myKnight, enemyKnight, dmg, "lightning strike");
+            return applyDamageToBoth(myKnight, enemy, dmg, dmg, "lightning strike");
         }
     },
 
@@ -163,7 +165,7 @@ public enum Skill {
         }
     },
 
-    HealerRevive("healer revive", 4, false, false) {
+    Revive("revive", 4, false, false) {
         @Override
         public Result perform(Knight myKnight, Knight enemyKnight) {
             Knight t = myKnight.getTeammate();
@@ -173,6 +175,7 @@ public enum Skill {
             }
 
             t.setDead(false);
+            t.setAP(3);
             int hp = (int)(t.getKnight().getHP() * 0.1);
             t.setHP(hp);
 
@@ -188,15 +191,7 @@ public enum Skill {
             return new Result(true, "debuffs removed\n");
         }
     },
-
-    Blessing("blessing", 3, false, false) {
-        @Override
-        public Result perform(Knight myKnight, Knight enemyKnight) {
-            myKnight.getCharm().setSpeed(1.2);
-            myKnight.getTeammate().getCharm().setSpeed(1.2);
-            return new Result(true, "speed buffed\n");
-        }
-    };
+    ;
 
     // ================= FIELDS =================
     private final String name;
@@ -244,11 +239,11 @@ public enum Skill {
         return new Result(true, sb.toString());
     }
 
-    protected Result applyDamageToBoth(Knight attacker, Knight enemy, int dmg, String skill) {
+    protected Result applyDamageToBoth(Knight attacker, Knight enemy, int dmg, int dmgTeammate, String skill) {
         StringBuilder sb = new StringBuilder();
 
         sb.append(applyDamage(attacker, enemy, dmg, skill, false).toString());
-        sb.append(applyDamage(attacker, enemy.getTeammate(), dmg, skill, false).toString());
+        sb.append(applyDamage(attacker, enemy.getTeammate(), dmgTeammate, skill, false).toString());
 
         return new Result(true, sb.toString());
     }
@@ -263,7 +258,6 @@ public enum Skill {
     protected void resetCharm(Knight k) {
         if (k.getCharm().getAttack() < 1) k.getCharm().setAttack(1);
         if (k.getCharm().getMagic() < 1) k.getCharm().setMagic(1);
-        if (k.getCharm().getHP() < 1) k.getCharm().setHP(1);
         if (k.getCharm().getDefense() < 1) k.getCharm().setDefense(1);
         if (k.getCharm().getSpeed() < 1) k.getCharm().setSpeed(1);
     }

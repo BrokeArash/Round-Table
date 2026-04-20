@@ -23,10 +23,6 @@ public class Player {
         this.gamesWon = 0;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -76,5 +72,10 @@ public class Player {
 
     public void addGamesWon() {
         this.gamesWon ++;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

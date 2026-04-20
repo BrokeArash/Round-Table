@@ -31,7 +31,7 @@ public class Knight {
         this.speed = knight.getSpeed();
         this.stunned = false;
         this.dead = false;
-        this.AP = 100;
+        this.AP = 5;
         this.charm = new Charm();
         this.totalDamageDealt = 0;
 
@@ -43,9 +43,11 @@ public class Knight {
 
 
     public Knight getTeammate() {
-        Player player = App.getGame().getCurrentPlayer();
+        Player player;
+        if (App.getGame().getCurrentPlayer().getKnights().contains(this)) player = App.getGame().getCurrentPlayer();
+        else player = App.getGame().getOtherPlayer();
         for (Knight knight : player.getKnights()) {
-            if (!knight.getKnight().equals(player.getCurrentKnight())) {
+            if (!knight.equals(player.getCurrentKnight())) {
                 return knight;
             }
         }
@@ -57,7 +59,7 @@ public class Knight {
     }
 
     public int getHP() {
-        return (int)(HP* charm.getHP());
+        return (int)(HP);
     }
 
     public void decreaseHP(int HP) {
@@ -91,6 +93,10 @@ public class Knight {
     public void addAP(int AP) {
         this.AP += AP;
         if (this.AP > 5) this.AP = 5;
+    }
+
+    public void setAP(int AP) {
+        this.AP = AP;
     }
 
     public void subAP(int AP) {
@@ -133,16 +139,6 @@ public class Knight {
             point *= 1.5;
 
         return point;
-    }
-
-
-    public Skill findSkill(String name) {
-        for (Skill skill : Skill.values()) {
-            if (skill.getName().equalsIgnoreCase(name)) {
-                return skill;
-            }
-        }
-        return null;
     }
 
     @Override

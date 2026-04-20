@@ -43,7 +43,7 @@ public class App {
 
     public static Player getPlayerByUsername(String username) {
         for (Player player : App.getPlayers()) {
-            if(player.getName().equals(username))
+            if(player.toString().equals(username))
                 return player;
         }
         return null;

@@ -15,6 +15,10 @@ public class Game {
         this.players = players;
     }
 
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
     public Queue<Knight> getQueue() {
         return queue;
     }
@@ -25,30 +29,6 @@ public class Game {
 
     public void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
-    }
-
-    public void nextTurn() {
-        App.getGame().getCurrentPlayer().getCurrentKnight().addAP(1);
-        boolean flag = false;
-        Knight tmp = null;
-        while (!flag) {
-            tmp = this.getQueue().poll();
-            if (tmp.isDead()) {
-                continue;
-            }else if (tmp.isStunned()) {
-                this.getQueue().offer(tmp);
-                tmp.setStunned(false);
-                continue;
-            }
-            flag = true;
-        }
-        for (Player player : players) {
-            if(player.getKnights().contains(tmp)) {
-                this.setCurrentPlayer(player);
-            }
-        }
-        this.getCurrentPlayer().setCurrentKnight(tmp);
-        this.getQueue().offer(tmp);
     }
 
     public Player checkEnd() {

@@ -23,7 +23,7 @@ public class MainMenu implements AppMenu {
             result = controller.exit();
             System.out.println(result);
         } else if ((matcher = MainCommands.ShowKnightsDetails.isMatch(input)) != null) {
-            result = controller.SeeCharacters();
+            result = controller.showKnightsDetails();
             System.out.println(result);
         } else if ((matcher = MainCommands.ScoreBoard.isMatch(input)) != null) {
             result = controller.gotoScoreboard();
@@ -43,7 +43,7 @@ public class MainMenu implements AppMenu {
 
                         if (i < 2) {
                             System.out.println("choosing knight for " +
-                                    App.getCurrentPlayer().getName() + ":");
+                                    App.getCurrentPlayer().toString() + ":");
                         } else {
                             System.out.println("choosing knight for " +
                                     username + ":");

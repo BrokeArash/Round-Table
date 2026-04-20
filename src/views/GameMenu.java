@@ -45,11 +45,8 @@ public class GameMenu implements AppMenu {
             System.out.println(result);
         } else if ((matcher =GameCommands.ShowStats.isMatch(input)) != null) {
             String name = matcher.group("knight");
-            result = controller.showStats(name, false);
-            System.out.println(result);
-        } else if ((matcher = GameCommands.ShowStatsEnemy.isMatch(input)) != null) {
-            String name = matcher.group("knight");
-            result = controller.showStats(name, true);
+            String username = matcher.group("username");
+            result = controller.showStats(name, username);
             System.out.println(result);
         } else if ((matcher = GameCommands.Attack.isMatch(input)) != null) {
             String name = matcher.group("knight");

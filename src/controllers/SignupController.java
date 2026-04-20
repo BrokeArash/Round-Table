@@ -27,7 +27,7 @@ public class SignupController {
 
         Player newPlayer = new Player(username, password);
         App.getPlayers().add(newPlayer);
-        return new Result(true, "signup Successfully");
+        return new Result(true, "registered Successfully");
 
     }
 

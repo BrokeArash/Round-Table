@@ -21,12 +21,12 @@ public class GameController {
     }
 
     public Result showTurn() {
-        String name = App.getGame().getCurrentPlayer().getName();
+        String name = App.getGame().getCurrentPlayer().toString();
         return new Result(true, "you are now playing " + name + "'s " + App.getGame().getCurrentPlayer().getCurrentKnight().toString());
     }
 
     public Result skipTurn() {
-        App.getGame().nextTurn();
+        nextTurn();
         return new Result(true, App.getGame().getCurrentPlayer().getCurrentKnight() + " is playing...");
     }
 
@@ -43,11 +43,9 @@ public class GameController {
         Knight myKnight = App.getGame().getCurrentPlayer().getCurrentKnight();
         StringBuilder stringBuilder = new StringBuilder();
         Charm myCharm = myKnight.getCharm();
-        if (myCharm.getHP() > 1) stringBuilder.append("HP got buffed by: ").append((int)(myCharm.getHP()*100)-100).append("%\n");
-        else if (myCharm.getHP() < 1) stringBuilder.append("HP got nerfed by: ").append((int)(myCharm.getHP()*100)-100).append("%\n");
 
         if (myCharm.getAttack() > 1) stringBuilder.append("attack got buffed by: ").append((int)(myCharm.getAttack()*100)-100).append("%\n");
-        else if (myCharm.getHP() < 1) stringBuilder.append("attack got nerfed by: ").append((int)(myCharm.getAttack()*100)-100).append("%\n");
+        else if (myCharm.getAttack() < 1) stringBuilder.append("attack got nerfed by: ").append((int)(myCharm.getAttack()*100)-100).append("%\n");
 
         if (myCharm.getMagic() > 1) stringBuilder.append("magic attack got buffed by: ").append((int)(myCharm.getMagic()*100)-100).append("%\n");
         else if (myCharm.getMagic() < 1) stringBuilder.append("magic attack got nerfed by: ").append((int)(myCharm.getMagic()*100)-100).append("%\n");
@@ -67,9 +65,18 @@ public class GameController {
         return new Result(true, tmp.toString() + "'s AP: " + App.getGame().getCurrentPlayer().getCurrentKnight().getAP() + "\n");
     }
 
-    public Result showStats(String name, boolean enemy) {
+    public Result showStats(String name, String username) {
         StringBuilder stringBuilder = new StringBuilder();
         Knight knight = null;
+        boolean enemy;
+
+        if (username == null)
+            return new Result(false, "player doesn't exist");
+
+        if (App.getGame().getCurrentPlayer().toString().equalsIgnoreCase(username.trim())) enemy = false;
+        else if (App.getGame().getOtherPlayer().toString().equalsIgnoreCase(username.trim())) enemy = true;
+        else return new Result(false, "player doesn't exist");
+
         if (enemy) knight = App.getGame().findEnemyKnightByName(name);
         else knight = App.getGame().findTeamKnightByName(name);
 
@@ -89,7 +96,7 @@ public class GameController {
 
     public Result Attack(String name) {
         Knight myKnight = App.getGame().getCurrentPlayer().getCurrentKnight();
-
+        StringBuilder stringBuilder = new StringBuilder();
         Knight enemy = App.getGame().findEnemyKnightByName(name);
         if (myKnight.toString().equalsIgnoreCase(name) && enemy == null) {
             return new Result(false, "you can't attack yourself");
@@ -103,20 +110,24 @@ public class GameController {
         }
         int damageDealt = calculateBaseAttack(myKnight, enemy);
         if (damageDealt < 0) {
-            App.getGame().nextTurn();
-            return new Result(true, "enemy dodged!");
+            nextTurn();
+            stringBuilder.append("enemy dodged!").append("\n");
+            stringBuilder.append(App.getGame().getCurrentPlayer().getCurrentKnight()).append(" is playing...");
+            return new Result(true, stringBuilder.toString());
         }
 
         myKnight.addTotalDamageDealt(damageDealt);
-        StringBuilder stringBuilder = new StringBuilder();
         enemy.decreaseHP(damageDealt);
-        stringBuilder.append("you dealt ").append(damageDealt).append("\n");
+        stringBuilder.append("you dealt ").append(damageDealt).append(" damage to ").append(enemy.toString()).append("\n");
         if (enemy.getHP() <= 0) {
             enemy.setDead(true);
-            stringBuilder.append(enemy.toString()).append(" is dead!");
+            stringBuilder.append(enemy.toString()).append(" is dead!").append("\n");
+            nextTurn();
+            stringBuilder.append(App.getGame().getCurrentPlayer().getCurrentKnight()).append(" is playing...");
             return new Result(true, stringBuilder.toString());
         }
-        App.getGame().nextTurn();
+        nextTurn();
+        stringBuilder.append(App.getGame().getCurrentPlayer().getCurrentKnight()).append(" is playing...");
         return new Result(true, stringBuilder.toString());
 
     }
@@ -127,8 +138,8 @@ public class GameController {
     public Result skill(String skillName, String knight) {
         Knight myKnight = App.getGame().getCurrentPlayer().getCurrentKnight();
         Knight enemyKnight = null;
-        Result result = null;
-        Skill skill = myKnight.findSkill(skillName.trim());
+        StringBuilder sb = new StringBuilder();
+        Skill skill = findSkill(skillName.trim());
         if (skill == null) {
             return new Result(false, "skill doesn't exist");
         } else if (!myKnight.getKnight().getSkills().contains(skill)) {
@@ -139,10 +150,16 @@ public class GameController {
             if (!skill.isNeedDashK())
                 return new Result(false, "this skill doesn't need target");
             enKnight = knight;
-            if (skill.isEnemy()) enemyKnight = App.getGame().findEnemyKnightByName(enKnight);
+            if (skill.isEnemy()) {
+                enemyKnight = App.getGame().findEnemyKnightByName(enKnight);
+            }
             else  enemyKnight = App.getGame().findTeamKnightByName(enKnight);
+
+            if (enemyKnight == null)
+                return new Result(false, "enemy doesn't exist");
         }
-        else enemyKnight = App.getGame().getOtherPlayer().getCurrentKnight();
+
+
         if (skill.isNeedDashK() && knight == null)
             return new Result(false, "this skill needs a target");
 
@@ -151,13 +168,14 @@ public class GameController {
         }
 
         myKnight.subAP(skill.getAP());
-        result = skill.perform(myKnight, enemyKnight);
-        App.getGame().nextTurn();
-        return new Result(true, result.toString());
+        sb.append(skill.perform(myKnight, enemyKnight)).append("\n");
+        nextTurn();
+        sb.append(App.getGame().getCurrentPlayer().getCurrentKnight()).append(" is playing...");
+        return new Result(true, sb.toString());
 
     }
 
-    public int calculateBaseAttack(Knight me, Knight enemy) {
+    private int calculateBaseAttack(Knight me, Knight enemy) {
         int damage = max(0, ((me.getAttack() + me.getMagicAttack())/2) - (int)(enemy.getDefense()*0.3));
         int attack = me.getAttack();
         if(me.getKnight().getKnightClass().equals(KnightClass.Healer) || me.getKnight().getKnightClass().equals(KnightClass.Mage))
@@ -166,6 +184,15 @@ public class GameController {
             return -1; //dodged
         }
         return damage;
+    }
+
+    private Skill findSkill(String name) {
+        for (Skill skill : Skill.values()) {
+            if (skill.getName().equalsIgnoreCase(name)) {
+                return skill;
+            }
+        }
+        return null;
     }
 
     public Result gameOutro(Player winner) {
@@ -187,11 +214,13 @@ public class GameController {
         }
 
         stringBuilder.append("war has ended").append("\n").append("--------------------").append("\n")
-                .append("winner: ").append(winner.getName()).append(" - points: ").append(winner.getPoint()).append("\n");
+                .append("winner: ").append(winner.toString()).append(" - points: ").append(winner.getPoint()).append("\n");
 
 
         endingStats(stringBuilder, winner, winner.getKnights());
-        stringBuilder.append("loser: ").append(loser.getName()).append(" - points: ").append(loser.getPoint()).append("\n");
+        stringBuilder.append("--------------------").append("\n");
+
+        stringBuilder.append("loser: ").append(loser.toString()).append(" - points: ").append(loser.getPoint()).append("\n");
         endingStats(stringBuilder, loser, loser.getKnights());
 
 
@@ -210,12 +239,40 @@ public class GameController {
 
     private void endingStats(StringBuilder stringBuilder, Player winner, ArrayList<Knight> knights) {
         for (Knight knight : knights) {
-            stringBuilder.append(winner.getName()).append("'s ").append(knight.toString()).append(": ")
+            stringBuilder.append(winner.toString()).append("'s ").append(knight.toString()).append(": ")
                     .append("damage dealt: ").append(knight.getTotalDamageDealt()).append(" - ")
                     .append("HP remained: ").append(knight.getHP()).append(" - ");
             if (knight.isDead()) stringBuilder.append("dead");
             else stringBuilder.append("alive");
             stringBuilder.append(" - ").append("point: ").append(knight.calculatePoint()).append("\n");
         }
+    }
+
+    private void nextTurn() {
+        Game game = App.getGame();
+        game.getCurrentPlayer().getCurrentKnight().addAP(1);
+        boolean flag = false;
+        Knight tmp = null;
+        while (!flag) {
+            tmp = game.getQueue().poll();
+            if (tmp.isDead()) {
+                game.getQueue().offer(tmp);
+                continue;
+            }else if (tmp.isStunned()) {
+                game.getQueue().offer(tmp);
+                tmp.setStunned(false);
+                continue;
+            }
+            flag = true;
+        }
+        for (Player player : game.getPlayers()) {
+            if(player.getKnights().contains(tmp)) {
+                Player prev = App.getGame().getCurrentPlayer();
+                prev.setCurrentKnight(prev.getKnights().get(0));
+                game.setCurrentPlayer(player);
+            }
+        }
+        game.getCurrentPlayer().setCurrentKnight(tmp);
+        game.getQueue().offer(tmp);
     }
 }

@@ -1,19 +1,18 @@
 package models.enums;
 
-import java.sql.DataTruncation;
 import java.util.List;
 
 public enum KnightType {
     Arthur("Arthur",KnightClass.Commander,200, 50, 15, 60, 30,
             List.of(Skill.ShieldBash, Skill.Fortify, Skill.ArmorBreak, Skill.Rally)),
     Mordred("Mordred",KnightClass.Commander,180, 40, 20, 50, 35,
-            List.of(Skill.ShieldBash, Skill.Rally, Skill.ArmorBreak, Skill.StrikeCommand)),
+            List.of(Skill.ShieldBash, Skill.StrikeCommand, Skill.ArmorBreak, Skill.Rally)),
     Lancelot("Lancelot",KnightClass.Warrior, 170, 60, 5, 90, 50,
             List.of(Skill.Slash, Skill.HeavyStrike, Skill.LifeSteal, Skill.Berserk)),
     Galahad("Galahad", KnightClass.Healer,150, 25, 20, 40, 70,
-            List.of(Skill.GroupHeal, Skill.HealerRevive, Skill.Cleanse, Skill.Heal)),
+            List.of(Skill.Heal, Skill.GroupHeal, Skill.Revive, Skill.Cleanse)),
     Morgan("Morgan", KnightClass.Mage,120, 10, 45, 35, 60,
-            List.of(Skill.Fireball, Skill.LightningStrike, Skill.Silence, Skill.ArcaneSurge)),
+            List.of(Skill.Fireball, Skill.LightningStrike, Skill.ArcaneSurge, Skill.Silence)),
     Merlin("Merlin", KnightClass.Mage, 130, 5, 55, 40, 55,
             List.of(Skill.Fireball, Skill.LightningStrike, Skill.IceBlast, Skill.ArcaneSurge)),
     ;
