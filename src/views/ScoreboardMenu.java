@@ -25,7 +25,7 @@ public class ScoreboardMenu implements  AppMenu {
             System.out.println(result);
         } else if ((matcher = ScoreboardCommands.ShowScoreboard.isMatch(input)) != null) {
             String sortType = matcher.group("sort");
-            result = controller.sort(sortType);
+            result = controller.sort(sortType.trim());
             System.out.println(result);
         } else if ((matcher = ScoreboardCommands.Back.isMatch(input)) != null) {
             result = controller.back();

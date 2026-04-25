@@ -57,7 +57,7 @@ public class MainMenu implements AppMenu {
                         validName = result.isTrue();
                     }
                 }
-                controller.playOutro();
+                System.out.println(controller.playOutro());
             }
         } else {
             System.out.println("invalid command");

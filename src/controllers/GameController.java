@@ -1,6 +1,7 @@
 package controllers;
 
 import models.*;
+import models.actions.SkillAction;
 import models.enums.KnightClass;
 import models.enums.Menu;
 import models.enums.Skill;
@@ -21,8 +22,8 @@ public class GameController {
     }
 
     public Result showTurn() {
-        String name = App.getGame().getCurrentPlayer().toString();
-        return new Result(true, "you are now playing " + name + "'s " + App.getGame().getCurrentPlayer().getCurrentKnight().toString());
+        Player player = App.getGame().getCurrentPlayer();
+        return new Result(true, "you are now playing as " + player.toString() + "'s " + player.getCurrentKnight().toString());
     }
 
     public Result skipTurn() {
@@ -30,39 +31,49 @@ public class GameController {
         return new Result(true, App.getGame().getCurrentPlayer().getCurrentKnight() + " is playing...");
     }
 
-    public Result showSkills() {
+    public Result showDetails() {
         Knight myKnight = App.getGame().getCurrentPlayer().getCurrentKnight();
         StringBuilder stringBuilder = new StringBuilder();
-        for(Skill skill : myKnight.getKnight().getSkills()){
-            stringBuilder.append(skill.getName()).append("->").append(" AP: ").append(skill.getAP()).append("\n--------------------\n");
+
+        stringBuilder.append(App.getGame().getCurrentPlayer().toString()).append("'s ").append(myKnight.toString()).append(" details: \n")
+                .append("--------------------").append("\n");
+
+        //SKILLS
+        stringBuilder.append("skills: ").append("\n");
+        for(Skill skill : myKnight.getType().getSkills()){
+            stringBuilder.append(skill.getName()).append("->").append(" AP: ").append(skill.getAP()).append("\n");
         }
+        stringBuilder.append("--------------------\n");
+
+        //AP
+        stringBuilder.append("AP: ").append(myKnight.getAP()).append("\n").append("--------------------").append("\n");
+
+        //CHARMS
+        stringBuilder.append("charms: ").append("\n");
+        stringBuilder.append(showCharms().toString());
+
         return new Result(true, stringBuilder.toString());
     }
 
-    public Result showCharms() {
+    private Result showCharms() {
         Knight myKnight = App.getGame().getCurrentPlayer().getCurrentKnight();
         StringBuilder stringBuilder = new StringBuilder();
         Charm myCharm = myKnight.getCharm();
 
         if (myCharm.getAttack() > 1) stringBuilder.append("attack got buffed by: ").append((int)(myCharm.getAttack()*100)-100).append("%\n");
-        else if (myCharm.getAttack() < 1) stringBuilder.append("attack got nerfed by: ").append((int)(myCharm.getAttack()*100)-100).append("%\n");
+        else if (myCharm.getAttack() < 1) stringBuilder.append("attack got nerfed by: ").append(-(int)(myCharm.getAttack()*100)+100).append("%\n");
 
         if (myCharm.getMagic() > 1) stringBuilder.append("magic attack got buffed by: ").append((int)(myCharm.getMagic()*100)-100).append("%\n");
-        else if (myCharm.getMagic() < 1) stringBuilder.append("magic attack got nerfed by: ").append((int)(myCharm.getMagic()*100)-100).append("%\n");
+        else if (myCharm.getMagic() < 1) stringBuilder.append("magic attack got nerfed by: ").append(-(int)(myCharm.getMagic()*100)+100).append("%\n");
 
         if (myCharm.getDefense() > 1) stringBuilder.append("defense got buffed by: ").append((int)(myCharm.getDefense()*100)-100).append("%\n");
-        else if (myCharm.getDefense() < 1) stringBuilder.append("defense got nerfed by: ").append((int)(myCharm.getDefense()*100)-100).append("%\n");
+        else if (myCharm.getDefense() < 1) stringBuilder.append("defense got nerfed by: ").append(-(int)(myCharm.getDefense()*100)+100).append("%\n");
 
         if (myCharm.getSpeed() > 1) stringBuilder.append("speed got buffed by: ").append((int)(myCharm.getSpeed()*100)-100).append("%\n");
-        else if (myCharm.getSpeed() < 1) stringBuilder.append("speed got nerfed by: ").append((int)(myCharm.getSpeed()*100)-100).append("%\n");
+        else if (myCharm.getSpeed() < 1) stringBuilder.append("speed got nerfed by: ").append(-(int)(myCharm.getSpeed()*100)+100).append("%\n");
 
-        if (stringBuilder.isEmpty()) return new  Result(true, "you have no charms on yourself");
+        if (stringBuilder.isEmpty()) return new  Result(true, "you have no charms on yourself\n");
         return new Result(true, stringBuilder.toString());
-    }
-
-    public Result showAP() {
-        Knight tmp = App.getGame().getCurrentPlayer().getCurrentKnight();
-        return new Result(true, tmp.toString() + "'s AP: " + App.getGame().getCurrentPlayer().getCurrentKnight().getAP() + "\n");
     }
 
     public Result showStats(String name, String username) {
@@ -73,8 +84,8 @@ public class GameController {
         if (username == null)
             return new Result(false, "player doesn't exist");
 
-        if (App.getGame().getCurrentPlayer().toString().equalsIgnoreCase(username.trim())) enemy = false;
-        else if (App.getGame().getOtherPlayer().toString().equalsIgnoreCase(username.trim())) enemy = true;
+        if (App.getGame().getCurrentPlayer().toString().equals(username.trim())) enemy = false;
+        else if (App.getGame().getOtherPlayer().toString().equals(username.trim())) enemy = true;
         else return new Result(false, "player doesn't exist");
 
         if (enemy) knight = App.getGame().findEnemyKnightByName(name);
@@ -87,10 +98,10 @@ public class GameController {
         if (knight == null) {
             return new Result(false, "knight doesn't exist");
         }
-        stringBuilder.append("name: ").append(knight.toString()).append(" - class: ").append(knight.getKnight().getKnightClass().getKnightName()).append("\n")
+        stringBuilder.append("name: ").append(knight.toString()).append(" - class: ").append(knight.getType().getKnightClass().getKnightName()).append("\n")
                 .append("HP: ").append(knight.getHP()).append(" - attack: ").append(knight.getAttack())
                 .append(" - magic attack: ").append(knight.getMagicAttack()).append(" - defense: ").append(knight.getDefense())
-                .append(" - speed: ").append(knight.getSpeed()).append("\n");
+                .append(" - speed: ").append(knight.getSpeed());
         return new Result(true, stringBuilder.toString());
     }
 
@@ -111,7 +122,7 @@ public class GameController {
         int damageDealt = calculateBaseAttack(myKnight, enemy);
         if (damageDealt < 0) {
             nextTurn();
-            stringBuilder.append("enemy dodged!").append("\n");
+            stringBuilder.append("shokhosh enemy dodge dad").append("\n");
             stringBuilder.append(App.getGame().getCurrentPlayer().getCurrentKnight()).append(" is playing...");
             return new Result(true, stringBuilder.toString());
         }
@@ -121,9 +132,12 @@ public class GameController {
         stringBuilder.append("you dealt ").append(damageDealt).append(" damage to ").append(enemy.toString()).append("\n");
         if (enemy.getHP() <= 0) {
             enemy.setDead(true);
+            enemy.setStunned(false);
             stringBuilder.append(enemy.toString()).append(" is dead!").append("\n");
-            nextTurn();
-            stringBuilder.append(App.getGame().getCurrentPlayer().getCurrentKnight()).append(" is playing...");
+            if (!App.getGame().checkEnd()) {
+                nextTurn();
+                stringBuilder.append(App.getGame().getCurrentPlayer().getCurrentKnight()).append(" is playing...");
+            }
             return new Result(true, stringBuilder.toString());
         }
         nextTurn();
@@ -142,7 +156,7 @@ public class GameController {
         Skill skill = findSkill(skillName.trim());
         if (skill == null) {
             return new Result(false, "skill doesn't exist");
-        } else if (!myKnight.getKnight().getSkills().contains(skill)) {
+        } else if (!myKnight.getType().getSkills().contains(skill)) {
             return new Result(false, "you don't have this skill");
         }
         String enKnight = null;
@@ -155,8 +169,10 @@ public class GameController {
             }
             else  enemyKnight = App.getGame().findTeamKnightByName(enKnight);
 
-            if (enemyKnight == null)
-                return new Result(false, "enemy doesn't exist");
+            if (enemyKnight == null) {
+                return new Result(false, "selected knight doesn't exist");
+            }
+
         }
 
 
@@ -168,9 +184,14 @@ public class GameController {
         }
 
         myKnight.subAP(skill.getAP());
-        sb.append(skill.perform(myKnight, enemyKnight)).append("\n");
-        nextTurn();
-        sb.append(App.getGame().getCurrentPlayer().getCurrentKnight()).append(" is playing...");
+        for (SkillAction action : skill.getActions()) {
+            sb.append(action.execute(skill, new BattleContext(myKnight, enemyKnight)));
+        }
+
+        if (!App.getGame().checkEnd()) {
+            nextTurn();
+            sb.append(App.getGame().getCurrentPlayer().getCurrentKnight()).append(" is playing...");
+        }
         return new Result(true, sb.toString());
 
     }
@@ -178,7 +199,7 @@ public class GameController {
     private int calculateBaseAttack(Knight me, Knight enemy) {
         int damage = max(0, ((me.getAttack() + me.getMagicAttack())/2) - (int)(enemy.getDefense()*0.3));
         int attack = me.getAttack();
-        if(me.getKnight().getKnightClass().equals(KnightClass.Healer) || me.getKnight().getKnightClass().equals(KnightClass.Mage))
+        if(me.getType().getKnightClass().equals(KnightClass.Healer) || me.getType().getKnightClass().equals(KnightClass.Mage))
             attack = me.getMagicAttack();
         if (attack < enemy.getSpeed()) {
             return -1; //dodged
@@ -195,9 +216,10 @@ public class GameController {
         return null;
     }
 
-    public Result gameOutro(Player winner) {
+    public Result gameOutro() {
         StringBuilder stringBuilder = new StringBuilder();
         Game game = App.getGame();
+        Player winner = game.getWinner();
         Player loser = game.getOtherPlayer(winner);
         winner.addGamesPlayed();
         winner.addGamesWon();
@@ -250,7 +272,7 @@ public class GameController {
 
     private void nextTurn() {
         Game game = App.getGame();
-        game.getCurrentPlayer().getCurrentKnight().addAP(1);
+        game.getCurrentPlayer().getCurrentKnight().addAP(2);
         boolean flag = false;
         Knight tmp = null;
         while (!flag) {

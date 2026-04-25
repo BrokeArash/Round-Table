@@ -33,11 +33,6 @@ public class ScoreboardController {
             for (Player player : App.getPlayers()) {
                 stringBuilder.append(player.toString()).append("-> ").append("games played: ").append(player.getGamesPlayed()).append("\n");
             }
-        } else if (sortType.equalsIgnoreCase(SortType.TotalDamage.toString())) {
-            App.getPlayers().sort(Comparator.comparing(Player::getDamageDealt).reversed());
-            for (Player player : App.getPlayers()) {
-                stringBuilder.append(player.toString()).append("-> ").append("total damage dealt: ").append(player.getDamageDealt()).append("\n");
-            }
         } else if (sortType.equalsIgnoreCase(SortType.GamesWon.toString())) {
             App.getPlayers().sort(Comparator.comparing(Player::getGamesWon).reversed());
             for (Player player : App.getPlayers()) {

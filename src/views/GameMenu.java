@@ -2,7 +2,6 @@ package views;
 
 import controllers.GameController;
 import models.App;
-import models.Player;
 import models.Result;
 import models.enums.GameCommands;
 
@@ -13,9 +12,8 @@ public class GameMenu implements AppMenu {
     private final GameController controller = new GameController();
     @Override
     public void check(Scanner scanner) {
-        Player winner;
-        if ((winner = App.getGame().checkEnd()) != null) {
-            System.out.println(controller.gameOutro(winner));
+        if (App.getGame().checkEnd()) {
+            System.out.println(controller.gameOutro());
         }
 
         String input = scanner.nextLine();
@@ -34,14 +32,8 @@ public class GameMenu implements AppMenu {
         }   else if ((matcher = GameCommands.SkipTurn.isMatch(input)) != null) {
             result = controller.skipTurn();
             System.out.println(result);
-        } else if ((matcher = GameCommands.ShowSkillsDetails.isMatch(input)) != null) {
-            result = controller.showSkills();
-            System.out.println(result);
-        }  else if ((matcher = GameCommands.ShowCharms.isMatch(input)) != null) {
-            result = controller.showCharms();
-            System.out.println(result);
-        } else if ((matcher = GameCommands.ShowAP.isMatch(input)) != null) {
-            result = controller.showAP();
+        } else if ((matcher = GameCommands.ShowDetails.isMatch(input)) != null) {
+            result = controller.showDetails();
             System.out.println(result);
         } else if ((matcher =GameCommands.ShowStats.isMatch(input)) != null) {
             String name = matcher.group("knight");

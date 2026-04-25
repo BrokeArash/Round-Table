@@ -31,14 +31,9 @@ public class Game {
         this.currentPlayer = currentPlayer;
     }
 
-    public Player checkEnd() {
-        if (players.get(0).getKnights().get(0).isDead() && players.get(0).getKnights().get(1).isDead()) {
-            return players.get(1);
-        }
-        else if (players.get(1).getKnights().get(0).isDead() && players.get(1).getKnights().get(1).isDead()) {
-            return players.get(0);
-        }
-        return null;
+    public boolean checkEnd() {
+        Player winner = getWinner();
+        return winner != null;
     }
 
     public Knight findEnemyKnightByName(String name) {
@@ -77,6 +72,16 @@ public class Game {
             }
         }
         return null; //must never happen
+    }
+
+    public Player getWinner() {
+        if (players.get(0).getKnights().get(0).isDead() && players.get(0).getKnights().get(1).isDead()) {
+            return players.get(1);
+        }
+        else if (players.get(1).getKnights().get(0).isDead() && players.get(1).getKnights().get(1).isDead()) {
+            return players.get(0);
+        }
+        return null;
     }
 
 }

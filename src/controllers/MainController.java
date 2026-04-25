@@ -58,7 +58,7 @@ public class MainController {
         tmp.add(App.getCurrentPlayer());
         tmp.add(otherPlayer);
         App.setGame(new Game(tmp));
-        return new Result(true,  "you're playing with " + otherPlayer.toString() + "\n");
+        return new Result(true,  "you're playing with " + otherPlayer.toString());
     }
 
     public Result chooseKnight(Game game, String inputName, int index) {
@@ -75,12 +75,12 @@ public class MainController {
         }
 
         if (index == 1 &&
-                App.getCurrentPlayer().getKnights().get(0).getKnight().equals(chosen)) {
+                App.getCurrentPlayer().getKnights().get(0).getType().equals(chosen)) {
             return new Result(false, "you've already chosen this knight");
         }
 
         if (index == 3 &&
-                game.getOtherPlayer().getKnights().get(0).getKnight().equals(chosen)) {
+                game.getOtherPlayer().getKnights().get(0).getType().equals(chosen)) {
             return new Result(false, "you've already chosen this knight");
         }
 
@@ -102,9 +102,10 @@ public class MainController {
         return new Result(true, "knight selected successfully");
     }
 
-    public void playOutro() {
+    public Result playOutro() {
         Knight knight = App.getGame().getQueue().poll();
         App.getGame().getQueue().offer(knight);
         App.setCurrentMenu(Menu.GameMenu);
+        return new Result(true,  "mobarake kheylia");
     }
 }

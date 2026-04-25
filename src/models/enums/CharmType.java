@@ -1,15 +1,16 @@
 package models.enums;
 
-public enum SortType {
-    GamesPlayed("games_played"),
-    point("point"),
-    GamesWon("games_won"),
+public enum CharmType {
+    Attack("attack"),
+    Magic("magic"),
+    Defense("defense"),
+    Speed("speed"),
+    Clean("clean"),
     ;
-
 
     private final String name;
 
-    SortType(String name) {
+    CharmType(String name) {
         this.name = name;
     }
 

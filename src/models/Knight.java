@@ -1,18 +1,13 @@
 package models;
 
 import models.enums.KnightType;
-import models.enums.Skill;
 
 
 import static java.lang.Math.max;
 
 public class Knight {
-    private final KnightType knight;
-    private int HP; //stats
-    private int attack;
-    private int defense;
-    private int magicAttack;
-    private int speed;
+    private final KnightType type;
+    private int HP;
     private boolean stunned;
     private boolean dead;
     private int AP;
@@ -23,22 +18,18 @@ public class Knight {
 
 
     public Knight(KnightType knight) {
-        this.knight = knight;
+        this.type = knight;
         this.HP = knight.getHP();
-        this.attack = knight.getAttack();
-        this.defense = knight.getDefense();
-        this.magicAttack = knight.getMagicAttack();
-        this.speed = knight.getSpeed();
         this.stunned = false;
         this.dead = false;
-        this.AP = 5;
+        this.AP = 3;
         this.charm = new Charm();
         this.totalDamageDealt = 0;
 
     }
 
-    public KnightType getKnight() {
-        return knight;
+    public KnightType getType() {
+        return type;
     }
 
 
@@ -71,19 +62,19 @@ public class Knight {
     }
 
     public int getAttack() {
-        return (int)(attack*charm.getAttack());
+        return (int)(type.getAttack() * charm.getAttack());
     }
 
     public int getDefense() {
-        return (int)(defense* charm.getDefense());
+        return (int)(type.getDefense() * charm.getDefense());
     }
 
     public int getMagicAttack() {
-        return (int)(magicAttack* charm.getMagic());
+        return (int)(type.getMagicAttack() * charm.getMagic());
     }
 
     public int getSpeed() {
-        return (int)(speed*charm.getSpeed());
+        return (int)(type.getSpeed() *charm.getSpeed());
     }
 
     public int getAP() {
@@ -131,7 +122,7 @@ public class Knight {
     }
 
     public int calculatePoint() {
-        int maxHP = this.getKnight().getHP();
+        int maxHP = this.getType().getHP();
         int damageTaken = max(maxHP - this.HP, 0);
         int point = this.totalDamageDealt - damageTaken;
 
@@ -143,6 +134,6 @@ public class Knight {
 
     @Override
     public String toString() {
-        return this.getKnight().toString();
+        return this.getType().toString();
     }
 }

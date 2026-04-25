@@ -1,270 +1,118 @@
 package models.enums;
 
-import models.App;
-import models.Knight;
-import models.Result;
+import models.actions.*;
+
+import java.util.List;
 
 public enum Skill {
 
     // ================= COMMANDER =================
-    ShieldBash("shield bash", 3, true, true) {
-        @Override
-        public Result perform(Knight myKnight, Knight enemyKnight) {
-            int dmg = calculatePhysicalDamage(myKnight, enemyKnight);
-            return applyDamage(myKnight, enemyKnight, dmg, "shield bash", true);
-        }
+    ShieldBash("shield bash", 3,
+            List.of(new DamageAction(), new StunAction()), true, true) {
     },
 
-    Fortify("fortify", 1, false, false) {
-        @Override
-        public Result perform(Knight myKnight, Knight enemyKnight) {
-            myKnight.getCharm().setDefense(1.2);
-            myKnight.getTeammate().getCharm().setDefense(1.2);
-            return new Result(true, "team's defense buffed by 20%\n");
-        }
+    Fortify("fortify", 1,
+            List.of(new BuffAction(1.2, CharmType.Defense, true)), false, false) {
     },
 
-    StrikeCommand("strike command", 5, true, false) {
-        @Override
-        public Result perform(Knight myKnight, Knight enemyKnight) {
-
-            Knight enemy = App.getGame().getOtherPlayer().getCurrentKnight();
-            Knight enemyTeammate = enemy.getTeammate();
-
-            int dmg = calculatePhysicalDamage(myKnight, enemy);
-            int dmgTeam = calculatePhysicalDamage(myKnight, enemyTeammate);
-
-            return applyDamageToBoth(myKnight, enemy, dmg, dmgTeam, "strike command");
-        }
+    StrikeCommand("strike command", 5,
+            List.of(new MultiTargetDamageAction()), true, false) {
     },
 
-    ArmorBreak("armor break", 2, true, false) {
-        @Override
-        public Result perform(Knight myKnight, Knight enemyKnight) {
-            Knight enemy = App.getGame().getOtherPlayer().getCurrentKnight();
-            enemy.getCharm().setDefense(0.85);
-            enemy.getTeammate().getCharm().setDefense(0.85);
-            return new Result(true, "enemy defense reduced by 15%\n");
-        }
+    ArmorBreak("armor break", 2,
+            List.of(new BuffAction(0.85, CharmType.Defense, true)), true, false) {
+
     },
 
-    Rally("rally", 4, false, false) {
-        @Override
-        public Result perform(Knight myKnight, Knight enemyKnight) {
-
-            heal(myKnight, 0.2);
-            heal(myKnight.getTeammate(), 0.2);
-            return new Result(true, "team healed by 20%\n");
-        }
+    Rally("rally", 4,
+            List.of(new HealAction(0.2, false)), false, false) {
     },
 
     // ================= WARRIOR =================
-    Slash("slash", 2, true, true) {
-        @Override
-        public Result perform(Knight myKnight, Knight enemyKnight) {
-            int dmg = calculatePhysicalDamage(myKnight, enemyKnight);
-            return applyDamage(myKnight, enemyKnight, dmg, "slash", false);
-        }
+    Slash("slash", 2,
+            List.of(new DamageAction()), true, true) {
+
     },
 
-    HeavyStrike("heavy strike", 4, true, true) {
-        @Override
-        public Result perform(Knight myKnight, Knight enemyKnight) {
-            int dmg = (int)(myKnight.getAttack() * 1.5)
-                    - (int)(enemyKnight.getDefense() * 0.3);
-            return applyDamage(myKnight, enemyKnight, dmg, "heavy strike", false);
-        }
+    HeavyStrike("heavy strike", 4,
+            List.of(new DamageAction()), true, true) {
+
     },
 
-    LifeSteal("life steal", 5, true, true) {
-        @Override
-        public Result perform(Knight myKnight, Knight enemyKnight) {
-            heal(myKnight, 0.1);
-            int dmg = calculatePhysicalDamage(myKnight, enemyKnight);
+    LifeSteal("life steal", 3,
+            List.of(new DamageAction(), new BuffAction(0.8, CharmType.Attack, false)),  true, true) {
 
-            Result r = applyDamage(myKnight, enemyKnight, dmg, "life steal", false);
-            return new Result(true, "HP healed 10%\n" + r.message());
-        }
     },
 
-    Berserk("berserk", 3, false, false) {
-        @Override
-        public Result perform(Knight myKnight, Knight enemyKnight) {
-            heal(myKnight, -0.2);
-            myKnight.getCharm().setAttack(1.6);
+    Berserk("berserk", 3,
+            List.of( new HealAction(-0.2, false), new BuffAction(1.6, CharmType.Attack, false)), false, true) {
 
-            String msg = "berserk activated\n";
-
-            if (myKnight.getHP() <= 0) {
-                myKnight.setDead(true);
-                msg += "you died!\n";
-            }
-
-            return new Result(true, msg);
-        }
     },
 
     // ================= MAGE =================
-    Fireball("fireball", 2, true, true) {
-        @Override
-        public Result perform(Knight myKnight, Knight enemyKnight) {
-            int dmg = calculateMagicDamage(myKnight);
-            return applyDamage(myKnight, enemyKnight, dmg, "fireball", false);
-        }
+    Fireball("fireball", 2,
+            List.of(new DamageAction()), true, true) {
     },
 
-    LightningStrike("lightning strike", 4, true, false) {
-        @Override
-        public Result perform(Knight myKnight, Knight enemyKnight) {
-            Knight enemy = App.getGame().getOtherPlayer().getCurrentKnight();
-            int dmg = calculateMagicDamage(myKnight);
-            return applyDamageToBoth(myKnight, enemy, dmg, dmg, "lightning strike");
-        }
+    LightningStrike("lightning strike", 4,
+            List.of(new MultiTargetDamageAction()), true, false) {
+
     },
 
-    IceBlast("ice blast", 3, true, true) {
-        @Override
-        public Result perform(Knight myKnight, Knight enemyKnight) {
-            enemyKnight.getCharm().setSpeed(0.8);
-            int dmg = calculateMagicDamage(myKnight);
-            return applyDamage(myKnight, enemyKnight, dmg, "ice blast", false);
-        }
+    IceBlast("ice blast", 3,
+            List.of(new DamageAction(), new BuffAction(0.8, CharmType.Speed, false)), true, true) {
+
     },
 
-    ArcaneSurge("arcane surge", 3, false, false) {
-        @Override
-        public Result perform(Knight myKnight, Knight enemyKnight) {
-            myKnight.getCharm().setMagic(1.3);
-            return new Result(true, "magic buffed by 30%\n");
-        }
+    ArcaneSurge("arcane surge", 3,
+            List.of(new BuffAction(1.3, CharmType.Magic, false)), false, true) {
+
     },
 
-    Silence("silence", 4, true, true) {
-        @Override
-        public Result perform(Knight myKnight, Knight enemyKnight) {
-            enemyKnight.setStunned(true);
-            return new Result(true, "enemy stunned\n");
-        }
+    Silence("silence", 4,
+            List.of(new StunAction()), true, true) {
     },
 
     // ================= HEALER =================
-    Heal("heal", 2, false, true) {
-        @Override
-        public Result perform(Knight myKnight, Knight enemyKnight) {
-            heal(enemyKnight, 0.2);
-            return new Result(true, "teammate healed\n");
-        }
+    Heal("heal", 2,
+            List.of(new HealAction(0.4, false)), false, true) {
     },
 
-    GroupHeal("group heal", 5, false, false) {
-        @Override
-        public Result perform(Knight myKnight, Knight enemyKnight) {
-            heal(myKnight, 0.2);
-            heal(myKnight.getTeammate(), 0.2);
-            return new Result(true, "team healed\n");
-        }
+    GroupHeal("group heal", 5,
+            List.of(new HealAction(0.2, false)), false, false) {
     },
 
-    Revive("revive", 4, false, false) {
-        @Override
-        public Result perform(Knight myKnight, Knight enemyKnight) {
-            Knight t = myKnight.getTeammate();
-
-            if (!t.isDead()) {
-                return new Result(true, "teammate is not dead\n");
-            }
-
-            t.setDead(false);
-            t.setAP(3);
-            int hp = (int)(t.getKnight().getHP() * 0.1);
-            t.setHP(hp);
-
-            return new Result(true, "teammate revived\n");
-        }
+    Revive("revive", 4,
+            List.of(new HealAction(0.1, true)), false, true) {
     },
 
-    Cleanse("cleanse", 3, false, false) {
-        @Override
-        public Result perform(Knight myKnight, Knight enemyKnight) {
-            resetCharm(myKnight);
-            resetCharm(myKnight.getTeammate());
-            return new Result(true, "debuffs removed\n");
-        }
+    Cleanse("cleanse", 3,
+            List.of(new BuffAction(1, CharmType.Clean, true)), false, false) {
     },
     ;
 
     // ================= FIELDS =================
     private final String name;
     private final int AP;
+    private final List<SkillAction> actions;
     private final boolean enemy;
     private final boolean needDashK;
 
-    public abstract Result perform(Knight myKnight, Knight enemyKnight);
 
-    Skill(String name, int AP, boolean enemy, boolean needDashK) {
+    Skill(String name, int AP, List<SkillAction> actions, boolean enemy, boolean needDashK) {
         this.name = name;
         this.AP = AP;
+        this.actions = actions;
         this.enemy = enemy;
         this.needDashK = needDashK;
-    }
-
-    // ================= HELPERS =================
-    protected int calculatePhysicalDamage(Knight attacker, Knight defender) {
-        return attacker.getAttack() - (int)(defender.getDefense() * 0.3);
-    }
-
-    protected int calculateMagicDamage(Knight attacker) {
-        return attacker.getMagicAttack();
-    }
-
-    protected Result applyDamage(Knight attacker, Knight target, int dmg, String skill, boolean stun) {
-        StringBuilder sb = new StringBuilder();
-        attacker.addTotalDamageDealt(dmg);
-        target.decreaseHP(dmg);
-
-        if (stun) target.setStunned(true);
-
-        sb.append(skill)
-                .append(" dealt ")
-                .append(dmg)
-                .append(" damage to ")
-                .append(target.toString())
-                .append("\n");
-
-        if (target.getHP() <= 0) {
-            target.setDead(true);
-            sb.append(target.toString()).append(" is dead!\n");
-        }
-
-        return new Result(true, sb.toString());
-    }
-
-    protected Result applyDamageToBoth(Knight attacker, Knight enemy, int dmg, int dmgTeammate, String skill) {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(applyDamage(attacker, enemy, dmg, skill, false).toString());
-        sb.append(applyDamage(attacker, enemy.getTeammate(), dmgTeammate, skill, false).toString());
-
-        return new Result(true, sb.toString());
-    }
-
-    protected void heal(Knight target, double percent) {
-        int maxHP = target.getKnight().getHP();
-        int amount = (int)(maxHP * percent);
-        if (target.getHP() + amount > maxHP) target.setHP(maxHP);
-        else target.decreaseHP(-amount);
-    }
-
-    protected void resetCharm(Knight k) {
-        if (k.getCharm().getAttack() < 1) k.getCharm().setAttack(1);
-        if (k.getCharm().getMagic() < 1) k.getCharm().setMagic(1);
-        if (k.getCharm().getDefense() < 1) k.getCharm().setDefense(1);
-        if (k.getCharm().getSpeed() < 1) k.getCharm().setSpeed(1);
     }
 
     // ================= GETTERS =================
     public String getName() { return name; }
     public int getAP() { return AP; }
+    public List<SkillAction> getActions() {
+        return actions;
+    }
     public boolean isEnemy() { return enemy; }
     public boolean isNeedDashK() { return needDashK; }
 }
