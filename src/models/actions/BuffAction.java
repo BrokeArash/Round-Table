@@ -52,8 +52,8 @@ public class BuffAction implements SkillAction {
             }
 
             if (includeTeammate)
-                return new Result(true, "team's " + type.toString() + " buffed by " + (int)(factor*100) + "%\n");
-            return new Result(true, target.toString() + "'s " + type.toString() + " buffed by " + (int)(factor*100) + "%\n");
+                return new Result(true, "team's " + type.toString() + " buffed by " + ((int)(factor*100)-100) + "%\n");
+            return new Result(true, target.toString() + "'s " + type.toString() + " buffed by " + ((int)(factor*100)-100) + "%\n");
 
         }
 

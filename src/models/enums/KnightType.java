@@ -37,10 +37,6 @@ public enum KnightType {
         this.skills = skills;
     }
 
-//    public String getName() {
-//        return name;
-//    }
-
     public KnightClass getKnightClass() {
         return knightClass;
     }

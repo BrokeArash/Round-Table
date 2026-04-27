@@ -14,6 +14,7 @@ public class GameMenu implements AppMenu {
     public void check(Scanner scanner) {
         if (App.getGame().checkEnd()) {
             System.out.println(controller.gameOutro());
+            return;
         }
 
         String input = scanner.nextLine();

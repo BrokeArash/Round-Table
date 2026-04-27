@@ -19,18 +19,14 @@ public class HealAction implements SkillAction {
     @Override
     public Result execute(Skill skill, BattleContext battleContext) {
 
-        //if (battleContext.getCaster().getType().getKnightClass().equals(KnightClass.Warrior)) {
-
         if (percent < 0) {
-            heal(battleContext.getCaster(), percent);
-            if (battleContext.getCaster().getHP() <= 0) {
-            battleContext.getCaster().setDead(true);
-            return new Result(true, "you died!\n");
+            heal(battleContext.getMainTarget(), percent);
+            if (battleContext.getMainTarget().getHP() <= 0) {
+            battleContext.getMainTarget().setDead(true);
+            return new Result(true, battleContext.getMainTarget().toString() + " died!\n");
             }
-            else return new Result(true, "you lost " + -(int)(percent*100) + "% HP\n");
+            else return new Result(true, battleContext.getMainTarget().toString() + " lost " + -(int)(percent*100) + "% HP\n");
         }
-        //return new  Result(true, "you got healed by " + (int)(percent*100) + "%\n");
-        //}
 
         else if (revive) {
 

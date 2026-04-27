@@ -7,7 +7,7 @@ public enum SignupCommands implements Command {
     ShowCurrentMenu ("^\\s*show\\s+current\\s+menu\\s*$"),
     Exit ("^\\s*exit\\s*$"),
     Signup ("^\\s*signup\\s+" +
-            "-username\\s+(?<username>.*)\\s+" +
+            "-username\\s+(?<username>\\S+)\\s+" +
             "-password\\s+(?<password>.*)\\s*$"),
 
         CheckUsername("^[a-zA-Z][a-zA-Z0-9_]*$"),
@@ -15,7 +15,7 @@ public enum SignupCommands implements Command {
 
     Login ("^\\s*login\\s+" +
             "-username\\s+(?<username>\\S+)\\s+" +
-            "-password\\s+(?<password>\\S+)\\s*$"),
+            "-password\\s+(?<password>.*)\\s*$"),
 
     ;
 

@@ -33,7 +33,7 @@ public class MainMenu implements AppMenu {
             System.out.println(result);
         } else if ((matcher = MainCommands.Play.isMatch(input)) != null) {
             String username = matcher.group("username");
-            result = controller.Play(username);
+            result = controller.Play(username.trim());
             System.out.println(result);
             if (result.isTrue()) {
                 for (int i = 0; i < 4; i++) {
@@ -46,12 +46,12 @@ public class MainMenu implements AppMenu {
                                     App.getCurrentPlayer().toString() + ":");
                         } else {
                             System.out.println("choosing knight for " +
-                                    username + ":");
+                                    username.trim() + ":");
                         }
 
                         String name = scanner.nextLine();
 
-                        result = controller.chooseKnight(App.getGame(), name, i);
+                        result = controller.chooseKnight(App.getGame(), name.trim(), i);
                         System.out.println(result);
 
                         validName = result.isTrue();

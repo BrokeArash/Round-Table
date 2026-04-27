@@ -65,7 +65,7 @@ public class MainController {
         KnightType chosen = null;
 
         for (KnightType knight : KnightType.values()) {
-            if(knight.toString().equalsIgnoreCase(inputName.trim())) {
+            if(knight.toString().equalsIgnoreCase(inputName)) {
                 chosen =  knight;
             }
         }

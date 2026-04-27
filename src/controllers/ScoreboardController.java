@@ -6,6 +6,7 @@ import models.Result;
 import models.enums.Menu;
 import models.enums.SortType;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 
 public class ScoreboardController {
@@ -21,26 +22,28 @@ public class ScoreboardController {
 
     public Result sort(String sortType) {
         StringBuilder stringBuilder = new StringBuilder();
+        ArrayList<Player> temp = new ArrayList<>(App.getPlayers());
         if ((sortType == null) || (sortType.isEmpty())) {
             return new Result(false, "invalid sort type");
         } else if (sortType.equalsIgnoreCase(SortType.point.toString())) {
-            App.getPlayers().sort(Comparator.comparing(Player::getPoint).reversed());
-            for (Player player : App.getPlayers()) {
+            temp.sort(Comparator.comparing(Player::getPoint).reversed());
+            for (Player player : temp) {
                 stringBuilder.append(player.toString()).append("-> ").append("points: ").append(player.getPoint()).append("\n");
             }
         } else if (sortType.equalsIgnoreCase(SortType.GamesPlayed.toString())) {
-            App.getPlayers().sort(Comparator.comparing(Player::getGamesPlayed).reversed());
-            for (Player player : App.getPlayers()) {
+            temp.sort(Comparator.comparing(Player::getGamesPlayed).reversed());
+            for (Player player : temp) {
                 stringBuilder.append(player.toString()).append("-> ").append("games played: ").append(player.getGamesPlayed()).append("\n");
             }
         } else if (sortType.equalsIgnoreCase(SortType.GamesWon.toString())) {
-            App.getPlayers().sort(Comparator.comparing(Player::getGamesWon).reversed());
-            for (Player player : App.getPlayers()) {
+            temp.sort(Comparator.comparing(Player::getGamesWon).reversed());
+            for (Player player : temp) {
                 stringBuilder.append(player.toString()).append("-> ").append("games won: ").append(player.getGamesWon()).append("\n");
             }
         } else {
             return new Result(false, "invalid sort type");
         }
+        temp.clear();
         return new Result(true, stringBuilder.toString());
     }
 

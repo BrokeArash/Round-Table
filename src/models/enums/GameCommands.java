@@ -8,7 +8,7 @@ public enum GameCommands implements Command {
     ShowDetails("^\\s*show\\s+details\\s*$"),
     ShowStats("^\\s*show\\s+stats\\s+-k\\s+(?<knight>\\S+)\\s+-u\\s+(?<username>.*)\\s*$"),
     Attack("^\\s*attack\\s+-k\\s+(?<knight>\\S+)\\s*$"),
-    Skill("^\\s*skill\\s+-s\\s+(?<skill>[^-]+?)(?:\\s+-k\\s+(?<knight>\\S+))?\\s*$"),
+    Skill("^\\s*skill\\s+-s\\s+(?<skill>[^-]+?)(?:\\s+-k\\s+(?<knight>.+))?\\s*$"),
 
     ;
 

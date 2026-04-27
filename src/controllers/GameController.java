@@ -91,10 +91,10 @@ public class GameController {
         if (enemy) knight = App.getGame().findEnemyKnightByName(name);
         else knight = App.getGame().findTeamKnightByName(name);
 
-        if (knight == null) {
-            if (name.equalsIgnoreCase(App.getGame().getCurrentPlayer().getCurrentKnight().toString())) knight = App.getGame().getCurrentPlayer().getCurrentKnight();
-            else if (name.equalsIgnoreCase(App.getGame().getCurrentPlayer().getCurrentKnight().getTeammate().toString())) knight = App.getGame().getCurrentPlayer().getCurrentKnight().getTeammate();
-        }
+//        if (knight == null) {
+//            if (name.equalsIgnoreCase(App.getGame().getCurrentPlayer().getCurrentKnight().toString())) knight = App.getGame().getCurrentPlayer().getCurrentKnight();
+//            else if (name.equalsIgnoreCase(App.getGame().getCurrentPlayer().getCurrentKnight().getTeammate().toString())) knight = App.getGame().getCurrentPlayer().getCurrentKnight().getTeammate();
+//        }
         if (knight == null) {
             return new Result(false, "knight doesn't exist");
         }
@@ -116,7 +116,7 @@ public class GameController {
             return new Result(false, "you can't attack your own teammate");
         }
 
-        if (enemy == null) {
+        if (enemy == null || enemy.isDead()) {
             return new Result(false, "enemy doesn't exist");
         }
         int damageDealt = calculateBaseAttack(myKnight, enemy);
@@ -163,13 +163,13 @@ public class GameController {
         if (knight != null) {
             if (!skill.isNeedDashK())
                 return new Result(false, "this skill doesn't need target");
-            enKnight = knight;
+            enKnight = knight.trim();
             if (skill.isEnemy()) {
                 enemyKnight = App.getGame().findEnemyKnightByName(enKnight);
             }
             else  enemyKnight = App.getGame().findTeamKnightByName(enKnight);
 
-            if (enemyKnight == null) {
+            if (enemyKnight == null || (enemyKnight.isDead() && !skill.equals(Skill.Revive))) {
                 return new Result(false, "selected knight doesn't exist");
             }
 
