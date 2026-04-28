@@ -72,7 +72,7 @@ public class GameController {
         if (myCharm.getSpeed() > 1) stringBuilder.append("speed got buffed by: ").append((int)(myCharm.getSpeed()*100)-100).append("%\n");
         else if (myCharm.getSpeed() < 1) stringBuilder.append("speed got nerfed by: ").append(-(int)(myCharm.getSpeed()*100)+100).append("%\n");
 
-        if (stringBuilder.isEmpty()) return new  Result(true, "you have no charms on yourself\n");
+        if (stringBuilder.length() == 0) return new  Result(true, "you have no charms on yourself\n");
         return new Result(true, stringBuilder.toString());
     }
 

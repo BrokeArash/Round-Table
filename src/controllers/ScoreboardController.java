@@ -23,7 +23,7 @@ public class ScoreboardController {
     public Result sort(String sortType) {
         StringBuilder stringBuilder = new StringBuilder();
         ArrayList<Player> temp = new ArrayList<>(App.getPlayers());
-        if ((sortType == null) || (sortType.isEmpty())) {
+        if ((sortType == null) || (sortType.length() == 0)) {
             return new Result(false, "invalid sort type");
         } else if (sortType.equalsIgnoreCase(SortType.point.toString())) {
             temp.sort(Comparator.comparing(Player::getPoint).reversed());

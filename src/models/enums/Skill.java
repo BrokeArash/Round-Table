@@ -2,92 +2,94 @@ package models.enums;
 
 import models.actions.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public enum Skill {
 
     // ================= COMMANDER =================
     ShieldBash("shield bash", 3,
-            List.of(new DamageAction(), new StunAction()), true, true) {
+            new ArrayList<>(Arrays.asList(new DamageAction(), new StunAction())), true, true) {
     },
 
     Fortify("fortify", 1,
-            List.of(new BuffAction(1.2, CharmType.Defense, true)), false, false) {
+            new ArrayList<>(Arrays.asList(new BuffAction(1.2, CharmType.Defense, true))), false, false) {
     },
 
     StrikeCommand("strike command", 5,
-            List.of(new MultiTargetDamageAction()), true, false) {
+            new ArrayList<>(Arrays.asList(new MultiTargetDamageAction())), true, false) {
     },
 
     ArmorBreak("armor break", 2,
-            List.of(new BuffAction(0.85, CharmType.Defense, true)), true, false) {
+            new ArrayList<>(Arrays.asList(new BuffAction(0.85, CharmType.Defense, true))), true, false) {
 
     },
 
     Rally("rally", 4,
-            List.of(new HealAction(0.2, false)), false, false) {
+            new ArrayList<>(Arrays.asList(new HealAction(0.2, false))), false, false) {
     },
 
     // ================= WARRIOR =================
     Slash("slash", 2,
-            List.of(new DamageAction()), true, true) {
+            new ArrayList<>(Arrays.asList(new DamageAction())), true, true) {
 
     },
 
     HeavyStrike("heavy strike", 4,
-            List.of(new DamageAction()), true, true) {
+            new ArrayList<>(Arrays.asList(new DamageAction())), true, true) {
 
     },
 
     LifeSteal("life steal", 3,
-            List.of(new DamageAction(), new BuffAction(0.8, CharmType.Attack, false)),  true, true) {
+            new ArrayList<>(Arrays.asList(new DamageAction(), new BuffAction(0.8, CharmType.Attack, false))),  true, true) {
 
     },
 
     Berserk("berserk", 3,
-            List.of( new HealAction(-0.2, false), new BuffAction(1.6, CharmType.Attack, false)), false, true) {
+            new ArrayList<>(Arrays.asList( new HealAction(-0.2, false), new BuffAction(1.6, CharmType.Attack, false))), false, true) {
 
     },
 
     // ================= MAGE =================
     Fireball("fireball", 2,
-            List.of(new DamageAction()), true, true) {
+            new ArrayList<>(Arrays.asList(new DamageAction())), true, true) {
     },
 
     LightningStrike("lightning strike", 4,
-            List.of(new MultiTargetDamageAction()), true, false) {
+            new ArrayList<>(Arrays.asList(new MultiTargetDamageAction())), true, false) {
 
     },
 
     IceBlast("ice blast", 3,
-            List.of(new DamageAction(), new BuffAction(0.8, CharmType.Speed, false)), true, true) {
+            new ArrayList<>(Arrays.asList(new DamageAction(), new BuffAction(0.8, CharmType.Speed, false))), true, true) {
 
     },
 
     ArcaneSurge("arcane surge", 3,
-            List.of(new BuffAction(1.3, CharmType.Magic, false)), false, true) {
+            new ArrayList<>(Arrays.asList(new BuffAction(1.3, CharmType.Magic, false))), false, true) {
 
     },
 
     Silence("silence", 4,
-            List.of(new StunAction()), true, true) {
+            new ArrayList<>(Arrays.asList(new StunAction())), true, true) {
     },
 
     // ================= HEALER =================
     Heal("heal", 2,
-            List.of(new HealAction(0.4, false)), false, true) {
+            new ArrayList<>(Arrays.asList(new HealAction(0.4, false))), false, true) {
     },
 
     GroupHeal("group heal", 5,
-            List.of(new HealAction(0.2, false)), false, false) {
+            new ArrayList<>(Arrays.asList(new HealAction(0.2, false))), false, false) {
     },
 
     Revive("revive", 4,
-            List.of(new HealAction(0.1, true)), false, true) {
+            new ArrayList<>(Arrays.asList(new HealAction(0.1, true))), false, true) {
     },
 
     Cleanse("cleanse", 3,
-            List.of(new BuffAction(1, CharmType.Clean, true)), false, false) {
+            new ArrayList<>(Arrays.asList(new BuffAction(1, CharmType.Clean, true))), false, false) {
     },
     ;
 
