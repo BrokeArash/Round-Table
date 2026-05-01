@@ -40,10 +40,12 @@ public class ScoreboardController {
             for (Player player : temp) {
                 stringBuilder.append(player.toString()).append("-> ").append("games won: ").append(player.getGamesWon()).append("\n");
             }
+
         } else {
             return new Result(false, "invalid sort type");
         }
         temp.clear();
+        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
         return new Result(true, stringBuilder.toString());
     }
 

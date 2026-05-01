@@ -51,6 +51,7 @@ public class GameController {
         //CHARMS
         stringBuilder.append("charms: ").append("\n");
         stringBuilder.append(showCharms().toString());
+        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
 
         return new Result(true, stringBuilder.toString());
     }
@@ -90,11 +91,6 @@ public class GameController {
 
         if (enemy) knight = App.getGame().findEnemyKnightByName(name);
         else knight = App.getGame().findTeamKnightByName(name);
-
-//        if (knight == null) {
-//            if (name.equalsIgnoreCase(App.getGame().getCurrentPlayer().getCurrentKnight().toString())) knight = App.getGame().getCurrentPlayer().getCurrentKnight();
-//            else if (name.equalsIgnoreCase(App.getGame().getCurrentPlayer().getCurrentKnight().getTeammate().toString())) knight = App.getGame().getCurrentPlayer().getCurrentKnight().getTeammate();
-//        }
         if (knight == null) {
             return new Result(false, "knight doesn't exist");
         }
@@ -137,6 +133,8 @@ public class GameController {
             if (!App.getGame().checkEnd()) {
                 nextTurn();
                 stringBuilder.append(App.getGame().getCurrentPlayer().getCurrentKnight()).append(" is playing...");
+            } else {
+                stringBuilder.deleteCharAt(stringBuilder.length() - 1);
             }
             return new Result(true, stringBuilder.toString());
         }
@@ -191,6 +189,8 @@ public class GameController {
         if (!App.getGame().checkEnd()) {
             nextTurn();
             sb.append(App.getGame().getCurrentPlayer().getCurrentKnight()).append(" is playing...");
+        } else {
+            sb.deleteCharAt(sb.length() - 1);
         }
         return new Result(true, sb.toString());
 
@@ -236,14 +236,15 @@ public class GameController {
         }
 
         stringBuilder.append("war has ended").append("\n").append("--------------------").append("\n")
-                .append("winner: ").append(winner.toString()).append(" - points: ").append(winner.getPoint()).append("\n");
+                .append("winner: ").append(winner.toString()).append(" - points: ").append(getPlayerPoint(winner)).append("\n");
 
 
         endingStats(stringBuilder, winner, winner.getKnights());
         stringBuilder.append("--------------------").append("\n");
 
-        stringBuilder.append("loser: ").append(loser.toString()).append(" - points: ").append(loser.getPoint()).append("\n");
+        stringBuilder.append("loser: ").append(loser.toString()).append(" - points: ").append(getPlayerPoint(loser)).append("\n");
         endingStats(stringBuilder, loser, loser.getKnights());
+        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
 
 
         App.setCurrentMenu(Menu.MainMenu);
@@ -296,5 +297,15 @@ public class GameController {
         }
         game.getCurrentPlayer().setCurrentKnight(tmp);
         game.getQueue().offer(tmp);
+    }
+
+    private int getPlayerPoint (Player player) {
+        int points = 0;
+
+        for (Knight k : player.getKnights()) {
+            points += k.calculatePoint();
+        }
+
+        return points;
     }
 }

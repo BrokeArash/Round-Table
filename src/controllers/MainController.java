@@ -32,6 +32,7 @@ public class MainController {
             stringBuilder.delete(stringBuilder.length()-3, stringBuilder.length());
             stringBuilder.append("\n").append("--------------------").append("\n");
         }
+        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
         return new Result(true,  stringBuilder.toString());
     }
 
