@@ -1,4 +1,4 @@
-package models.actions;
+package controllers.actions;
 
 import models.BattleContext;
 import models.Knight;
@@ -21,6 +21,7 @@ public class BuffAction implements SkillAction {
     @Override
     public Result execute(Skill skill, BattleContext battleContext) {
 
+        //CLEANSE
         if (type.equals(CharmType.Clean)) {
             resetCharm(battleContext.getCaster());
             resetCharm(battleContext.getAllyTeammate());
@@ -28,6 +29,7 @@ public class BuffAction implements SkillAction {
         }
         Knight target = battleContext.getMainTarget();
 
+        //BUFF
         if (factor > 1) {
 
             if (target == null) target = battleContext.getCaster();
@@ -51,12 +53,14 @@ public class BuffAction implements SkillAction {
                     break;
             }
 
+            //Team BUFF
             if (includeTeammate)
                 return new Result(true, "team's " + type.toString() + " buffed by " + ((int)(factor*100)-100) + "%\n");
             return new Result(true, target.toString() + "'s " + type.toString() + " buffed by " + ((int)(factor*100)-100) + "%\n");
 
         }
 
+        //NERF
         if (target == null) {
             target = battleContext.getEnemy();
         }
@@ -81,6 +85,7 @@ public class BuffAction implements SkillAction {
         }
 
 
+        //Team NERF
         if (includeTeammate) return new Result(true, "enemy's " + type.toString() + " nerfed by " + (-(int)(factor*100) + 100) + "%\n");
         return new Result(true, target.toString() + "'s " + type.toString() + " nerfed by " + (-(int)(factor*100) + 100) + "%\n");
     }

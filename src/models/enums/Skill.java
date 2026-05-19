@@ -1,6 +1,6 @@
 package models.enums;
 
-import models.actions.*;
+import controllers.actions.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1,9 +1,8 @@
-package models.actions;
+package controllers.actions;
 
 import models.BattleContext;
 import models.Knight;
 import models.Result;
-import models.enums.KnightClass;
 import models.enums.Skill;
 
 public class HealAction implements SkillAction {
@@ -19,6 +18,7 @@ public class HealAction implements SkillAction {
     @Override
     public Result execute(Skill skill, BattleContext battleContext) {
 
+        // BERSERK
         if (percent < 0) {
             heal(battleContext.getMainTarget(), percent);
             if (battleContext.getMainTarget().getHP() <= 0) {
@@ -28,6 +28,7 @@ public class HealAction implements SkillAction {
             else return new Result(true, battleContext.getMainTarget().toString() + " lost " + -(int)(percent*100) + "% HP\n");
         }
 
+        //REVIVE
         else if (revive) {
 
             if (!battleContext.getAllyTeammate().isDead() || battleContext.getCaster().equals(battleContext.getMainTarget())) {
@@ -41,11 +42,13 @@ public class HealAction implements SkillAction {
             return new Result(true, "teammate revived\n");
         }
 
+        //HEAL
         else if (skill.isNeedDashK()) {
             heal(battleContext.getMainTarget(), percent);
             return new Result(true, battleContext.getMainTarget().toString() + " got healed by " + (int) (percent * 100) + "%\n");
         }
 
+        //GROUP HEAL
         heal(battleContext.getCaster(), percent);
         heal(battleContext.getAllyTeammate(), percent);
 

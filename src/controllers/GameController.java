@@ -1,7 +1,7 @@
 package controllers;
 
 import models.*;
-import models.actions.SkillAction;
+import controllers.actions.SkillAction;
 import models.enums.KnightClass;
 import models.enums.Menu;
 import models.enums.Skill;

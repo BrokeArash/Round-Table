@@ -1,4 +1,4 @@
-package models.actions;
+package controllers.actions;
 
 import models.BattleContext;
 import models.Knight;
