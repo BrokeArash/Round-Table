@@ -5,9 +5,7 @@ import controllers.actions.SkillAction;
 import models.enums.KnightClass;
 import models.enums.Menu;
 import models.enums.Skill;
-
 import java.util.ArrayList;
-
 import static java.lang.Math.max;
 
 public class GameController {
@@ -144,9 +142,6 @@ public class GameController {
 
     }
 
-
-
-
     public Result skill(String skillName, String knight) {
         Knight myKnight = App.getGame().getCurrentPlayer().getCurrentKnight();
         Knight enemyKnight = null;
@@ -172,7 +167,6 @@ public class GameController {
             }
 
         }
-
 
         if (skill.isNeedDashK() && knight == null)
             return new Result(false, "this skill needs a target");

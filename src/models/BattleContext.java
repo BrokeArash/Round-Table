@@ -3,8 +3,8 @@ package models;
 public class BattleContext {
     private final Knight caster;
     private Knight mainTarget;
-    private Knight enemy;
-    private Knight enemyTeammate;
+    private final Knight enemy;
+    private final Knight enemyTeammate;
     private final Knight allyTeammate;
 
     public BattleContext(Knight caster, Knight mainTarget) {

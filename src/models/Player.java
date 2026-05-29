@@ -5,10 +5,8 @@ import java.util.ArrayList;
 public class Player {
     private final String name;
     private final String password;
-
     private ArrayList<Knight> knights;
     private Knight currentKnight;
-
     private int point;
     private int damageDealt;
     private int gamesPlayed;
@@ -48,10 +46,6 @@ public class Player {
 
     public void setCurrentKnight(Knight currentKnight) {
         this.currentKnight = currentKnight;
-    }
-
-    public int getDamageDealt() {
-        return damageDealt;
     }
 
     public void addDamageDealt(int damageDealt) {

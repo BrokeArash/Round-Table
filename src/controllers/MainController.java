@@ -4,7 +4,6 @@ import models.*;
 import models.enums.KnightType;
 import models.enums.Menu;
 import models.enums.Skill;
-
 import java.util.ArrayList;
 
 public class MainController {
@@ -15,25 +14,25 @@ public class MainController {
 
     public Result exit() {
         App.setCurrentMenu(Menu.ExitMenu);
-        return new  Result(true, "");
+        return new Result(true, "");
     }
 
-    public Result showKnightsDetails(){
+    public Result showKnightsDetails() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("characters:").append("\n").append("--------------------").append("\n");
-        for(KnightType knight : KnightType.values()){
+        for (KnightType knight : KnightType.values()) {
             stringBuilder.append("name: ").append(knight.toString()).append(" - class: ").append(knight.getKnightClass().getKnightName()).append("\n")
                     .append("HP: ").append(knight.getHP()).append(" - attack: ").append(knight.getAttack())
                     .append(" - magic attack: ").append(knight.getMagicAttack()).append(" - defense: ").append(knight.getDefense())
                     .append(" - speed: ").append(knight.getSpeed()).append("\n").append("skills: ");
-            for(Skill skill : knight.getSkills()){
+            for (Skill skill : knight.getSkills()) {
                 stringBuilder.append(skill.getName()).append(" - ");
             }
-            stringBuilder.delete(stringBuilder.length()-3, stringBuilder.length());
+            stringBuilder.delete(stringBuilder.length() - 3, stringBuilder.length());
             stringBuilder.append("\n").append("--------------------").append("\n");
         }
         stringBuilder.deleteCharAt(stringBuilder.length() - 1);
-        return new Result(true,  stringBuilder.toString());
+        return new Result(true, stringBuilder.toString());
     }
 
     public Result gotoScoreboard() {
@@ -41,16 +40,16 @@ public class MainController {
         return new Result(true, "you're now in " + App.getCurrentMenu().toString());
     }
 
-    public Result Logout(){
+    public Result Logout() {
         App.setCurrentPlayer(null);
         App.setCurrentMenu(Menu.SignupMenu);
-        return new Result(true,  "logged out successfully");
+        return new Result(true, "logged out successfully");
     }
 
-    public Result Play(String username){
+    public Result Play(String username) {
         Player otherPlayer = App.getPlayerByUsername(username);
         if (username.equals(App.getCurrentPlayer().toString())) {
-            return new Result(false,  "you can't play with yourself");
+            return new Result(false, "you can't play with yourself");
         }
         if (otherPlayer == null) {
             return new Result(false, "invalid player name");
@@ -59,15 +58,26 @@ public class MainController {
         tmp.add(App.getCurrentPlayer());
         tmp.add(otherPlayer);
         App.setGame(new Game(tmp));
-        return new Result(true,  "you're playing with " + otherPlayer.toString());
+        return new Result(true, "you're playing with " + otherPlayer.toString());
     }
+
+    public Result printKnightSelection(int i, String username) {
+        if (i < 2) {
+            return new Result(false, "choosing knight for " +
+                    App.getCurrentPlayer().toString() + ":");
+        } else {
+            return new Result(false, "choosing knight for " +
+                    username.trim() + ":");
+        }
+    }
+
 
     public Result chooseKnight(Game game, String inputName, int index) {
         KnightType chosen = null;
 
         for (KnightType knight : KnightType.values()) {
-            if(knight.toString().equalsIgnoreCase(inputName)) {
-                chosen =  knight;
+            if (knight.toString().equalsIgnoreCase(inputName)) {
+                chosen = knight;
             }
         }
 
@@ -107,6 +117,8 @@ public class MainController {
         Knight knight = App.getGame().getQueue().poll();
         App.getGame().getQueue().offer(knight);
         App.setCurrentMenu(Menu.GameMenu);
-        return new Result(true,  "mobarake kheylia");
+        return new Result(true, "mobarake kheylia");
     }
 }
+
+

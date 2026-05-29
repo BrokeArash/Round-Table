@@ -1,7 +1,5 @@
 package models;
 
-import models.enums.KnightType;
-
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Queue;
@@ -62,7 +60,7 @@ public class Game {
                 return player;
             }
         }
-        return null; //must never happen
+        return null;
     }
 
     public Player getOtherPlayer(Player player) {
@@ -71,7 +69,7 @@ public class Game {
                 return tmp;
             }
         }
-        return null; //must never happen
+        return null;
     }
 
     public Player getWinner() {

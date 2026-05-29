@@ -9,7 +9,7 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class MainMenu implements AppMenu {
-    private MainController controller = new MainController();
+    private final MainController controller = new MainController();
     @Override
     public void check(Scanner scanner) {
         String input = scanner.nextLine();
@@ -32,35 +32,35 @@ public class MainMenu implements AppMenu {
             result = controller.Logout();
             System.out.println(result);
         } else if ((matcher = MainCommands.Play.isMatch(input)) != null) {
-            String username = matcher.group("username");
-            result = controller.Play(username.trim());
-            System.out.println(result);
-            if (result.isTrue()) {
-                for (int i = 0; i < 4; i++) {
-                    boolean validName = false;
-
-                    while (!validName) {
-
-                        if (i < 2) {
-                            System.out.println("choosing knight for " +
-                                    App.getCurrentPlayer().toString() + ":");
-                        } else {
-                            System.out.println("choosing knight for " +
-                                    username.trim() + ":");
-                        }
-
-                        String name = scanner.nextLine();
-
-                        result = controller.chooseKnight(App.getGame(), name.trim(), i);
-                        System.out.println(result);
-
-                        validName = result.isTrue();
-                    }
-                }
-                System.out.println(controller.playOutro());
-            }
+            handlePlay(matcher, scanner);
         } else {
             System.out.println("invalid command");
+        }
+    }
+
+    private void handlePlay(Matcher matcher, Scanner scanner) {
+        String username = matcher.group("username");
+
+        Result result = controller.Play(username.trim());
+        System.out.println(result);
+
+        if (result.isTrue()) {
+            for (int i = 0; i < 4; i++) {
+                boolean validName = false;
+
+                while (!validName) {
+
+                    result = controller.printKnightSelection(i, username);
+                    System.out.println(result);
+
+                    String name = scanner.nextLine();
+
+                    result = controller.chooseKnight(App.getGame(), name.trim(), i);
+                    System.out.println(result);
+                    validName = result.isTrue();
+                }
+            }
+            System.out.println(controller.playOutro());
         }
     }
 }

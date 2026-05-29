@@ -2,7 +2,6 @@ package models;
 
 import models.enums.KnightType;
 
-
 import static java.lang.Math.max;
 
 public class Knight {
@@ -11,10 +10,8 @@ public class Knight {
     private boolean stunned;
     private boolean dead;
     private int AP;
-
     private int totalDamageDealt;
-
-    private Charm charm;
+    private final Charm charm;
 
 
     public Knight(KnightType knight) {
@@ -42,7 +39,7 @@ public class Knight {
                 return knight;
             }
         }
-        return null; //must never happen
+        return null;
     }
 
     public Charm getCharm() {

@@ -1,6 +1,5 @@
 package views;
 
-import controllers.MainController;
 import controllers.ScoreboardController;
 import models.Result;
 import models.enums.MainCommands;
@@ -10,7 +9,7 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class ScoreboardMenu implements  AppMenu {
-    private ScoreboardController controller = new ScoreboardController();
+    private final ScoreboardController controller = new ScoreboardController();
     @Override
     public void check(Scanner scanner) {
         String input = scanner.nextLine();

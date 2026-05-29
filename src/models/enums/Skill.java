@@ -8,7 +8,7 @@ import java.util.List;
 
 public enum Skill {
 
-    // ================= COMMANDER =================
+    //COMMANDER
     ShieldBash("shield bash", 3,
             new ArrayList<>(Arrays.asList(new DamageAction(), new StunAction())), true, true) {
     },
@@ -30,7 +30,7 @@ public enum Skill {
             new ArrayList<>(Arrays.asList(new HealAction(0.2, false))), false, false) {
     },
 
-    // ================= WARRIOR =================
+    //WARRIOR
     Slash("slash", 2,
             new ArrayList<>(Arrays.asList(new DamageAction())), true, true) {
 
@@ -51,7 +51,7 @@ public enum Skill {
 
     },
 
-    // ================= MAGE =================
+    //MAGE
     Fireball("fireball", 2,
             new ArrayList<>(Arrays.asList(new DamageAction())), true, true) {
     },
@@ -75,7 +75,7 @@ public enum Skill {
             new ArrayList<>(Arrays.asList(new StunAction())), true, true) {
     },
 
-    // ================= HEALER =================
+    //HEALER
     Heal("heal", 2,
             new ArrayList<>(Arrays.asList(new HealAction(0.4, false))), false, true) {
     },
@@ -93,7 +93,6 @@ public enum Skill {
     },
     ;
 
-    // ================= FIELDS =================
     private final String name;
     private final int AP;
     private final List<SkillAction> actions;
@@ -109,7 +108,6 @@ public enum Skill {
         this.needDashK = needDashK;
     }
 
-    // ================= GETTERS =================
     public String getName() { return name; }
     public int getAP() { return AP; }
     public List<SkillAction> getActions() {

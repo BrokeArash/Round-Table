@@ -1,7 +1,6 @@
 package models.enums;
 
 import views.*;
-
 import java.util.Scanner;
 
 public enum Menu {

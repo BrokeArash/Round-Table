@@ -1,9 +1,5 @@
 package models.enums;
 
-import views.AppMenu;
-
-import java.util.regex.Matcher;
-
 public enum ScoreboardCommands implements Command {
     ShowCurrentMenu ("^\\s*show\\s+current\\s+menu\\s*$"),
     Exit ("^\\s*exit\\s*$"),

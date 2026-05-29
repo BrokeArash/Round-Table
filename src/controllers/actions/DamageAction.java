@@ -8,7 +8,6 @@ import models.enums.Skill;
 
 public class DamageAction implements SkillAction {
 
-
     public DamageAction() {}
 
     @Override

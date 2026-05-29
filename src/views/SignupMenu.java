@@ -1,8 +1,6 @@
 package views;
 
-
 import controllers.SignupController;
-import models.App;
 import models.Result;
 import models.enums.SignupCommands;
 
@@ -36,6 +34,5 @@ public class SignupMenu implements AppMenu {
         } else {
             System.out.println("invalid command");
         }
-
     }
 }

@@ -84,7 +84,6 @@ public class BuffAction implements SkillAction {
                 break;
         }
 
-
         //Team NERF
         if (includeTeammate) return new Result(true, "enemy's " + type.toString() + " nerfed by " + (-(int)(factor*100) + 100) + "%\n");
         return new Result(true, target.toString() + "'s " + type.toString() + " nerfed by " + (-(int)(factor*100) + 100) + "%\n");

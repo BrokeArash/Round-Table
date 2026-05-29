@@ -6,13 +6,11 @@ public enum SortType {
     GamesWon("games_won"),
     ;
 
-
     private final String name;
 
     SortType(String name) {
         this.name = name;
     }
-
 
     @Override
     public String toString() {

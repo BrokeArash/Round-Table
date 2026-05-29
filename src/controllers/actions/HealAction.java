@@ -9,7 +9,6 @@ public class HealAction implements SkillAction {
     private final double percent;
     private final boolean revive;
 
-
     public HealAction(double percent, boolean revive) {
         this.percent = percent;
         this.revive = revive;

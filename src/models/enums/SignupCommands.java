@@ -1,8 +1,5 @@
 package models.enums;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public enum SignupCommands implements Command {
     ShowCurrentMenu ("^\\s*show\\s+current\\s+menu\\s*$"),
     Exit ("^\\s*exit\\s*$"),
@@ -16,7 +13,6 @@ public enum SignupCommands implements Command {
     Login ("^\\s*login\\s+" +
             "-username\\s+(?<username>\\S+)\\s+" +
             "-password\\s+(?<password>.*)\\s*$"),
-
     ;
 
     private final String pattern;
